@@ -50,4 +50,10 @@ public class PostController {
     public ResponseEntity delete(@PathVariable(value = "id") String id){
         return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/pdf")
+    public ResponseEntity pdf(){
+         return new ResponseEntity(service.crearPdf(), HttpStatus.OK);
+    }
+    
 }

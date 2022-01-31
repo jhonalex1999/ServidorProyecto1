@@ -15,4 +15,5 @@ public interface PostManagementService {
     Boolean add(PostDTO post);
     Boolean edit(String id, PostDTO post);
     Boolean delete(String id);
+    Boolean crearPdf();
 }
