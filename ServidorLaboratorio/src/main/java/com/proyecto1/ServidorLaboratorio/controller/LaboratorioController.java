@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -27,6 +30,11 @@ public class LaboratorioController {
     public ResponseEntity pdf(){
         System.out.println("hola pdf");
         return new ResponseEntity(service.crearPdf(), HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/{idFranjaHoraria}/{idGrupo}/insertarHorario")
+    public ResponseEntity add(@PathVariable(value = "idFranjaHoraria") String idFranjaHoraria,@PathVariable(value = "idGrupo") String idGrupo){
+        return new ResponseEntity(service.insertarHorario(idFranjaHoraria, idGrupo), HttpStatus.OK);
     }
     
 }

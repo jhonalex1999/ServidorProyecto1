@@ -11,4 +11,5 @@ package com.proyecto1.ServidorLaboratorio.service;
  */
 public interface LaboratorioManagementService {
         Boolean crearPdf();
+        Boolean insertarHorario(String idFranjaHoraria, String idGrupo);
 }

@@ -5,10 +5,13 @@
  */
 package com.proyecto1.ServidorLaboratorio.service;
 
+import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
+import java.util.List;
+
 /**
  *
  * @author admin
  */
 public interface UsuarioManagementService {
-    
+        boolean prueba();
 }

@@ -9,6 +9,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -25,6 +26,9 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  *
@@ -59,7 +63,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             
             
         
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection().get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("post").get();
         
       
         try {
@@ -90,7 +94,26 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
      return Boolean.TRUE;
     }
         
-    private CollectionReference getCollection(){
-        return firebase.getFirestore().collection("post");
+   
+    @Override
+    public Boolean insertarHorario(String idFranjaHoraria, String idGrupo) {
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("idFranjaHoraria", idFranjaHoraria);
+        docData.put("idGrupo", idGrupo);
+       
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDA").document().create(docData);
+
+        try {
+            if (null != writeResultApiFuture.get()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        } 
     }
+     private CollectionReference getCollection(String Colecion){
+        return firebase.getFirestore().collection(Colecion);
+    }
+
 }

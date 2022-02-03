@@ -36,7 +36,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
         List<PostDTO> response = new ArrayList<>();
         PostDTO post;
         
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection().get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("post").get();
         
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
@@ -54,7 +54,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     public Boolean add(PostDTO post) {
         Map<String, Object> docData = getDocData(post);
 
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection().document().create(docData);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document().create(docData);
 
         try {
             if (null != writeResultApiFuture.get()) {
@@ -70,7 +70,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     public Boolean edit(String id, PostDTO post) {
         Map<String, Object> docData = getDocData(post);
         
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection().document(id).set(docData);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document(id).set(docData);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -83,7 +83,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
 
     @Override
     public Boolean delete(String id) {
-         ApiFuture<WriteResult> writeResultApiFuture = getCollection().document(id).delete();
+         ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document(id).delete();
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -96,8 +96,8 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     
    
     
-    private CollectionReference getCollection(){
-        return firebase.getFirestore().collection("post");
+    private CollectionReference getCollection(String Colecion){
+        return firebase.getFirestore().collection(Colecion);
     }
     
     private Map<String, Object> getDocData(PostDTO post){
