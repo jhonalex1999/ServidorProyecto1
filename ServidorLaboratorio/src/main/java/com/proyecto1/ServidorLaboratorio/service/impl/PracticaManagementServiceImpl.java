@@ -7,7 +7,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
-import com.proyecto1.ServidorLaboratorio.service.PostManagementService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.proyecto1.ServidorLaboratorio.service.PracticaManagementService;
 
 @Service
-public class PostManagementServiceImpl implements PostManagementService {
+public class PracticaManagementServiceImpl implements PracticaManagementService {
 
     @Autowired
     private FirebaseInitializer firebase;
@@ -94,60 +94,7 @@ public class PostManagementServiceImpl implements PostManagementService {
         } 
     }
     
-    @Override
-    public Boolean crearPdf(){
-        List<PostDTO> response = new ArrayList<>();
-        PostDTO post;
-        
-        Document documento= new Document();
-    
-            String ruta = System.getProperty("user.home");
-        try {
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Prueba.pdf"));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PostManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(PostManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            documento.open();
-            
-            PdfPTable tabla = new PdfPTable(3);
-            tabla.addCell("id");
-            tabla.addCell("titulo");
-            tabla.addCell("contenido");
-            
-            
-        
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection().get();
-        
-      
-        try {
-            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                post = doc.toObject(PostDTO.class);
-                post.setId(doc.getId());
-                response.add(post);
-            }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(PostManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ExecutionException ex) {
-            Logger.getLogger(PostManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-        for(int i =0; i<response.size();i++){
-                tabla.addCell(response.get(i).getId());        
-                tabla.addCell(response.get(i).getTitle());
-                tabla.addCell(response.get(i).getContent());
-                
-        }       
-        try { 
-            documento.add(tabla);
-        } catch (DocumentException ex) {
-            Logger.getLogger(PostManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         documento.close();
-        
-     return Boolean.TRUE;
-    }
+   
     
     private CollectionReference getCollection(){
         return firebase.getFirestore().collection("post");

@@ -6,7 +6,6 @@
 package com.proyecto1.ServidorLaboratorio.controller;
 
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
-import com.proyecto1.ServidorLaboratorio.service.PostManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +17,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.proyecto1.ServidorLaboratorio.service.PracticaManagementService;
 
 @RestController
-@RequestMapping(value = "/post")
-public class PostController {
+@RequestMapping(value = "/practica")
+public class PracticaController {
     
     @Autowired
-    private PostManagementService service;
+    private PracticaManagementService service;
     
     @GetMapping(value = "/greet/{name}")
     public String greet(@PathVariable(value = "name") String name){
@@ -51,9 +51,6 @@ public class PostController {
         return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
     
-    @GetMapping(value = "/pdf")
-    public ResponseEntity pdf(){
-         return new ResponseEntity(service.crearPdf(), HttpStatus.OK);
-    }
+    
     
 }
