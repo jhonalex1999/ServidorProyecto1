@@ -138,7 +138,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
        Map<String, Object> docData = new HashMap<>();
        docData.put("idLaboratorio", idLaboratorio);
        docData.put("problema", problema);
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMAS").document().create(docData);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("INCIDENCIAS").document().create(docData);
 
         try {
             if (null != writeResultApiFuture.get()) {
@@ -151,10 +151,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean finalizarPractica(int codGrupal) {
+    public Boolean finalizarPractica(String codGrupal) {
         
         String id= buscarGrupo(codGrupal);
-        
+        System.out.println(id);
         if(id.equals("no existe")){
               return false;
         }else{
@@ -169,7 +169,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         } 
         }
     }
-    private String buscarGrupo(int codGrupal){
+    private String buscarGrupo(String codGrupal){
        GrupoDTO grupo;
        ApiFuture<QuerySnapshot> querySnapshotApiFuture =firebase.getFirestore().collection("GRUPO").whereEqualTo("codGrupal",codGrupal).get();
      

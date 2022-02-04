@@ -14,5 +14,5 @@ public interface LaboratorioManagementService {
         Boolean insertarHorario(String idFranjaHoraria, String idGrupo);
         Boolean buscarHorario(String idFranjaHoraria, String idGrupo);
         Boolean insertarProblema(String idLaboratorio,String problema);
-        Boolean finalizarPractica(int codGrupal);
+        Boolean finalizarPractica(String codGrupal);
 }

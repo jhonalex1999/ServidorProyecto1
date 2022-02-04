@@ -53,7 +53,7 @@ public class LaboratorioController {
     }
     
     @DeleteMapping(value = "/{codGrupal}/finalizarPractica")
-    public ResponseEntity finalizarPractica(@PathVariable(value = "codGrupal") int codGrupal){
+    public ResponseEntity finalizarPractica(@PathVariable(value = "codGrupal") String codGrupal){
         return new ResponseEntity(service.finalizarPractica(codGrupal), HttpStatus.OK);
     }
 }

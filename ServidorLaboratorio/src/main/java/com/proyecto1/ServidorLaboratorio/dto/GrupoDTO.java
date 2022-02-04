@@ -14,8 +14,5 @@ import lombok.Data;
 @Data
 public class GrupoDTO {
     private String id;
-    private int codGrupal;
-    private String correo;
-    private Boolean estado;
-    private String rol;
+    private String codGrupal;
 }
