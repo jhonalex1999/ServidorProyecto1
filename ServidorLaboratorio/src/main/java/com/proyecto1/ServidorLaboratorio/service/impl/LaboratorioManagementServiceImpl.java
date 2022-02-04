@@ -50,7 +50,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     
             String ruta = System.getProperty("user.home");
         try {
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/Prueba.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Downloads/Prueba.pdf"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PracticaManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
