@@ -12,4 +12,7 @@ package com.proyecto1.ServidorLaboratorio.service;
 public interface LaboratorioManagementService {
         Boolean crearPdf();
         Boolean insertarHorario(String idFranjaHoraria, String idGrupo);
+        Boolean buscarHorario(String idFranjaHoraria, String idGrupo);
+        Boolean insertarProblema(String idLaboratorio,String problema);
+        Boolean finalizarPractica(int codGrupal);
 }

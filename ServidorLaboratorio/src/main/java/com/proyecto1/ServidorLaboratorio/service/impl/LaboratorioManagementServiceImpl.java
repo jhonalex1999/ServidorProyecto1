@@ -7,6 +7,7 @@ package com.proyecto1.ServidorLaboratorio.service.impl;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
@@ -14,6 +15,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
 import java.io.FileNotFoundException;
@@ -112,7 +114,78 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         } 
     }
-     private CollectionReference getCollection(String Colecion){
+    @Override
+    public Boolean buscarHorario(String idFranjaHoraria, String idGrupo) {
+      ApiFuture<QuerySnapshot> querySnapshotApiFutur =firebase.getFirestore().collection("AGENDA").whereEqualTo("idFranjaHoraria",idFranjaHoraria).whereEqualTo("idGrupo", idGrupo).get();
+      
+      try {
+           if(querySnapshotApiFutur.get().isEmpty()){
+               return false;
+           }
+       } catch (InterruptedException ex) {
+           Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (ExecutionException ex) {
+           Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+       }
+      return true;
+       
+    }
+    
+
+
+    @Override
+    public Boolean insertarProblema(String idLaboratorio, String problema) {
+       Map<String, Object> docData = new HashMap<>();
+       docData.put("idLaboratorio", idLaboratorio);
+       docData.put("problema", problema);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMAS").document().create(docData);
+
+        try {
+            if (null != writeResultApiFuture.get()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        } 
+    }
+
+    @Override
+    public Boolean finalizarPractica(int codGrupal) {
+        
+        String id= buscarGrupo(codGrupal);
+        
+        if(id.equals("no existe")){
+              return false;
+        }else{
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("GRUPO").document(id).delete();
+        try {
+            if (null != writeResultApiFuture.get()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        } 
+        }
+    }
+    private String buscarGrupo(int codGrupal){
+       GrupoDTO grupo;
+       ApiFuture<QuerySnapshot> querySnapshotApiFuture =firebase.getFirestore().collection("GRUPO").whereEqualTo("codGrupal",codGrupal).get();
+     
+       try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                grupo = doc.toObject(GrupoDTO.class);
+                grupo.setId(doc.getId());
+                String id=grupo.getId();
+                return id;
+            }
+            return "no existe";
+        } catch (Exception e) {
+            return "nullo";
+        } 
+    }
+    private CollectionReference getCollection(String Colecion){
         return firebase.getFirestore().collection(Colecion);
     }
 
