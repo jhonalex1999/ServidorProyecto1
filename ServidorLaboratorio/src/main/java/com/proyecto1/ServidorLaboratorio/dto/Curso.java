@@ -7,15 +7,13 @@ package com.proyecto1.ServidorLaboratorio.dto;
 
 /**
  *
- * @author admin
+ * @author julio
  */
-import lombok.Data;
+public class Curso {
 
-@Data
-public class GrupoDTO {
-    private String id;
-    private Integer codGrupal;
-    private String correo;
-    private Integer estado;
-    private String rol;
+    private String nombreCurso;
+    private Integer codigoMatricula;
+    private String fechaCreacion;
+    private String fechaEliminacion;
+    private Integer tamanoGrupo;
 }

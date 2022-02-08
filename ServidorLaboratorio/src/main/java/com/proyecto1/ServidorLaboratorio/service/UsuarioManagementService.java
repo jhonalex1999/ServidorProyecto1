@@ -13,5 +13,10 @@ import java.util.List;
  * @author admin
  */
 public interface UsuarioManagementService {
-        boolean prueba();
+
+    boolean prueba();
+
+    public Object agregarUsuario(PostDTO post);
+    
+    public Boolean buscarCodigoCurso(int idCurso);
 }
