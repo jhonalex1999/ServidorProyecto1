@@ -33,9 +33,9 @@ public class PracticaController {
         return "Hola" + name;
     }
     
-    @GetMapping(value = "/list")
-    public ResponseEntity list(){
-        return new ResponseEntity(service.list(), HttpStatus.OK);
+    @GetMapping(value = "/listarPracticas")
+    public ResponseEntity listarPracticas(){
+        return new ResponseEntity(service.listarPracticas(), HttpStatus.OK);
     }
     
     @PostMapping(value = "/add")

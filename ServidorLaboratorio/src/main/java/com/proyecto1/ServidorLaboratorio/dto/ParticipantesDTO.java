@@ -5,17 +5,17 @@
  */
 package com.proyecto1.ServidorLaboratorio.dto;
 
-/**
- *
- * @author admin
- */
 import lombok.Data;
 
+/**
+ *
+ * @author julio
+ */
 @Data
-public class GrupoDTO {
-    private String id;
+public class ParticipantesDTO {
+
     private Integer codGrupal;
-    private String correo;
-    private Integer estado;
+    private Integer idUsuario;
     private String rol;
+    private Integer estado;
 }

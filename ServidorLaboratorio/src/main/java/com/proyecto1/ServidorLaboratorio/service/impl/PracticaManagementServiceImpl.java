@@ -19,6 +19,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
@@ -32,22 +33,22 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     private FirebaseInitializer firebase;
 
     @Override
-    public List<PostDTO> list() {
-        List<PostDTO> response = new ArrayList<>();
-        PostDTO post;
-        
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("post").get();
-        
+    public List<PracticaDTO> listarPracticas() {
+        List<PracticaDTO> response = new ArrayList<>();
+        PracticaDTO post;
+
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("PRACTICA").get();
+
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                post = doc.toObject(PostDTO.class);
+                post = doc.toObject(PracticaDTO.class);
                 post.setId(doc.getId());
                 response.add(post);
             }
             return response;
         } catch (Exception e) {
             return null;
-        }   
+        }
     }
 
     @Override
@@ -63,13 +64,13 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        } 
-    }   
+        }
+    }
 
     @Override
     public Boolean edit(String id, PostDTO post) {
         Map<String, Object> docData = getDocData(post);
-        
+
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document(id).set(docData);
         try {
             if (null != writeResultApiFuture.get()) {
@@ -78,12 +79,12 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        } 
+        }
     }
 
     @Override
     public Boolean delete(String id) {
-         ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document(id).delete();
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("post").document(id).delete();
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -91,20 +92,19 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        } 
+        }
     }
-    
-   
-    
-    private CollectionReference getCollection(String Colecion){
+
+    private CollectionReference getCollection(String Colecion) {
         return firebase.getFirestore().collection(Colecion);
     }
-    
-    private Map<String, Object> getDocData(PostDTO post){
+
+    private Map<String, Object> getDocData(PostDTO post) {
         Map<String, Object> docData = new HashMap<>();
         docData.put("title", post.getTitle());
         docData.put("content", post.getContent());
         return docData;
-    } 
-  
+    }
+
+
 }

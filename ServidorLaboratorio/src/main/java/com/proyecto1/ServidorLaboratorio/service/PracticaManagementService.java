@@ -6,11 +6,12 @@
 package com.proyecto1.ServidorLaboratorio.service;
 
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
+import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import java.util.List;
 
 public interface PracticaManagementService {
     
-    List<PostDTO> list();
+    List<PracticaDTO> listarPracticas();
     
     Boolean add(PostDTO post);
     Boolean edit(String id, PostDTO post);
