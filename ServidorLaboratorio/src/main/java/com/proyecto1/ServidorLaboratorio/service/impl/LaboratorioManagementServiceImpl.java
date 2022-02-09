@@ -195,7 +195,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean agregarHorario(int idAgendamiento, int codGrupal) {
         String Agendamiento=BuscarAgendamiento(idAgendamiento);
        
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal,"estadoDisposicion",false);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
