@@ -6,7 +6,7 @@
 package com.proyecto1.ServidorLaboratorio.service;
 
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
-import com.proyecto1.ServidorLaboratorio.dto.FranjaHorariaDTO;
+import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public interface LaboratorioManagementService {
 
-    List<FranjaHorariaDTO> listarFranjaHoraria();
+    List<AgendamientoDTO> listarFranjaHoraria();
     
     List<LeyHookeDTO> listarDatosHardwareLeyDeHooke();
     
@@ -33,9 +33,9 @@ public interface LaboratorioManagementService {
     
     Boolean agregarParticipantes(ParticipantesDTO post);
 
-    Boolean insertarHorario(String idFranjaHoraria, String idGrupo);
+    Boolean agregarHorario(int idAgendamiento, int codGrupal);
 
-    Boolean buscarHorario(String idFranjaHoraria, String idGrupo);
+    Boolean buscarHorario(int idAgendamiento, int codGrupal);
 
     Boolean insertarProblema(String idLaboratorio, String problema);
 

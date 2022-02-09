@@ -16,7 +16,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
-import com.proyecto1.ServidorLaboratorio.dto.FranjaHorariaDTO;
+import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
@@ -173,15 +173,15 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public List<FranjaHorariaDTO> listarFranjaHoraria() {
-        List<FranjaHorariaDTO> response = new ArrayList<>();
-        FranjaHorariaDTO post;
+    public List<AgendamientoDTO> listarFranjaHoraria() {
+        List<AgendamientoDTO> response = new ArrayList<>();
+        AgendamientoDTO post;
 
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("FRANJA_HORARIA").get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                post = doc.toObject(FranjaHorariaDTO.class);
+                post = doc.toObject(AgendamientoDTO.class);
                 post.setIdFranja(doc.getId());
                 response.add(post);
             }
@@ -192,13 +192,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean insertarHorario(String idFranjaHoraria, String idGrupo) {
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("idFranjaHoraria", idFranjaHoraria);
-        docData.put("idGrupo", idGrupo);
-
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDA").document().create(docData);
-
+    public Boolean agregarHorario(int idAgendamiento, int codGrupal) {
+        String Agendamiento=BuscarAgendamiento(idAgendamiento);
+       
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -207,12 +204,29 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         } catch (Exception e) {
             return Boolean.FALSE;
         }
+
+     
+        
     }
-
+    private String BuscarAgendamiento(int idAgendamiento) {
+    String Agendamiento="vacio";
+    ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                Agendamiento=doc.getId();
+                return Agendamiento;
+                
+            }   } catch (InterruptedException ex) {
+            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return Agendamiento;
+    }
     @Override
-    public Boolean buscarHorario(String idFranjaHoraria, String idGrupo) {
-        ApiFuture<QuerySnapshot> querySnapshotApiFutur = firebase.getFirestore().collection("AGENDA").whereEqualTo("idFranjaHoraria", idFranjaHoraria).whereEqualTo("idGrupo", idGrupo).get();
-
+    public Boolean buscarHorario(int idAgendamiento, int codGrupal) {
+        
+        ApiFuture<QuerySnapshot> querySnapshotApiFutur = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).whereEqualTo("codGrupal", codGrupal).get();
         try {
             if (querySnapshotApiFutur.get().isEmpty()) {
                 return false;
@@ -245,38 +259,40 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean finalizarPractica(int codGrupal) {
-
-        String id = buscarGrupo(codGrupal);
-
-        if (id.equals("no existe")) {
-            return false;
-        } else {
-            ApiFuture<WriteResult> writeResultApiFuture = getCollection("GRUPO").document(id).delete();
+        List<String> response = new ArrayList<>();
+        response = buscarGrupo(codGrupal);
+        Boolean bandera =false;
+        for(int id=0;id<response.size();id++){
+      
+            ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(response.get(id)).delete();
             try {
                 if (null != writeResultApiFuture.get()) {
-                    return Boolean.TRUE;
-                }
-                return Boolean.FALSE;
+                     bandera=true;
+                }else{
+                 bandera =false;}
             } catch (Exception e) {
-                return Boolean.FALSE;
+                 bandera=false;
             }
-        }
+     }
+        
+        return bandera;
     }
 
-    private String buscarGrupo(int codGrupal) {
-        GrupoDTO grupo;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("GRUPO").whereEqualTo("codGrupal", codGrupal).get();
+    private List<String> buscarGrupo(int codGrupal) {
+        List<String> response = new ArrayList<>();
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                grupo = doc.toObject(GrupoDTO.class);
-                grupo.setId(doc.getId());
-                String id = grupo.getId();
-                return id;
+                 participantes = doc.toObject(ParticipantesDTO.class);
+                participantes.setId(doc.getId());
+                response.add(participantes.getId());
+                
             }
-            return "no existe";
+            return response;
         } catch (Exception e) {
-            return "nullo";
+            return null;
         }
     }
 

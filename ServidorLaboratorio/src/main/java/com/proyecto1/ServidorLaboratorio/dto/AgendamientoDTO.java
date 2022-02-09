@@ -12,7 +12,7 @@ import lombok.Data;
  * @author julio
  */
 @Data
-public class FranjaHorariaDTO {
+public class AgendamientoDTO {
 
     private String idFranja;
     private Integer codGrupal;

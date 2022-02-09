@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -65,14 +66,14 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarFranjaHoraria(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{idFranjaHoraria}/{idGrupo}/insertarHorario")
-    public ResponseEntity insertarHorario(@PathVariable(value = "idFranjaHoraria") String idFranjaHoraria, @PathVariable(value = "idGrupo") String idGrupo) {
-        return new ResponseEntity(service.insertarHorario(idFranjaHoraria, idGrupo), HttpStatus.OK);
+    @PutMapping(value = "/{idAgendamiento}/{codGrupal}/agregarHorario")
+    public ResponseEntity agregarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
+        return new ResponseEntity(service.agregarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{idFranjaHoraria}/{idGrupo}/buscarHorario")
-    public ResponseEntity buscarHorario(@PathVariable(value = "idFranjaHoraria") String idFranjaHoraria, @PathVariable(value = "idGrupo") String idGrupo) {
-        return new ResponseEntity(service.buscarHorario(idFranjaHoraria, idGrupo), HttpStatus.OK);
+    @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
+    public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
+        return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
     }
 
     @PostMapping(value = "/{idLaboratorio}/{problema}/insertarProblema")

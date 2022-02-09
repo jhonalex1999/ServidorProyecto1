@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 public class ParticipantesDTO {
-
+    private String id;
     private Integer codGrupal;
     private Integer idUsuario;
     private String rol;
