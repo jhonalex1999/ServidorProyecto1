@@ -5,7 +5,10 @@
  */
 package com.proyecto1.ServidorLaboratorio.service;
 
+import com.proyecto1.ServidorLaboratorio.dto.CursoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
+import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +18,10 @@ import java.util.List;
 public interface UsuarioManagementService {
 
     boolean prueba();
-
-    public Object agregarUsuario(PostDTO post);
     
-    public Boolean buscarCodigoCurso(int idCurso);
+    public ArrayList<String> buscarCursosMatriculados (String correo);
+    
+    public Boolean agregarCurso(String correo_institucional, int codigo_curso);
+    
+    public Boolean ingresarUsuario(String correo_institucional, String nombre);
 }

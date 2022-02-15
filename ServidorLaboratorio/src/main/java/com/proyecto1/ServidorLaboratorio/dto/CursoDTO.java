@@ -5,15 +5,19 @@
  */
 package com.proyecto1.ServidorLaboratorio.dto;
 
+import lombok.Data;
+
 /**
  *
  * @author julio
  */
-public class Curso {
+@Data
+public class CursoDTO {
 
     private String nombreCurso;
     private Integer codigoMatricula;
     private String fechaCreacion;
     private String fechaEliminacion;
     private Integer tamanoGrupo;
+    private String nombreCompleto;
 }

@@ -5,7 +5,10 @@
  */
 package com.proyecto1.ServidorLaboratorio.controller;
 
+import com.proyecto1.ServidorLaboratorio.dto.CursoDTO;
+import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
+import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import com.proyecto1.ServidorLaboratorio.service.UsuarioManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,14 +33,26 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioManagementService service;
+    int codigo_curso = 0;
 
-    @PostMapping(value = "/agregarUsuario")
+    /*@PostMapping(value = "/agregarUsuario")
     public ResponseEntity add(@RequestBody PostDTO post) {
         return new ResponseEntity(service.agregarUsuario(post), HttpStatus.OK);
+    }*/
+
+    @PostMapping(value = "{correo}/{codCurso}/matricularCurso")
+    public ResponseEntity matricularCurso(@PathVariable(value = "codCurso") int codigoCurso, @PathVariable(value = "correo") String correo_institucional) {
+        return new ResponseEntity(service.agregarCurso(correo_institucional, codigoCurso), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{codCurso}/buscarCodigoCurso")
-    public ResponseEntity buscarCodigoCurso(@PathVariable(value = "codCurso") int codCurso) {
-        return new ResponseEntity(service.buscarCodigoCurso(codCurso), HttpStatus.OK);
+    @GetMapping(value = "/{correo}/buscarCursosMatriculados")
+    public ResponseEntity buscarCursosMatriculados(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.buscarCursosMatriculados(correo), HttpStatus.OK);
     }
+
+    @PostMapping(value = "{correo}/{nombreCompleto}/ingresarUsuario")
+    public ResponseEntity ingresarUsuario(@PathVariable(value = "correo") String correo_institucional,@PathVariable(value = "nombreCompleto") String nombre) {
+        return new ResponseEntity(service.ingresarUsuario(correo_institucional,nombre), HttpStatus.OK);
+    }
+
 }
