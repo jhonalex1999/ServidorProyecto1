@@ -173,7 +173,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public List<AgendamientoDTO> listarFranjaHoraria() {
+    public List<AgendamientoDTO> listarAgendamiento() {
         List<AgendamientoDTO> response = new ArrayList<>();
         AgendamientoDTO post;
 

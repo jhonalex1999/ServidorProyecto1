@@ -19,5 +19,7 @@ public class AgendamientoDTO {
     private String horaInicio;
     private String horaFin;
     private Integer estadoDisposicion;
-    private String fecha;
+    private Integer dia;
+    private Integer mes;
+    private Integer anio;
 }
