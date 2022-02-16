@@ -330,7 +330,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         Map<String, Object> docData = new HashMap<>();
         docData.put("codGrupal", post.getCodGrupal());
         docData.put("estado", post.getEstado());
-        docData.put("idUsuario", post.getIdUsuario());
+        docData.put("correo", post.getCorreo());
         docData.put("rol", post.getRol());
         return docData;
     }
