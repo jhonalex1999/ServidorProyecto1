@@ -173,11 +173,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public List<AgendamientoDTO> listarAgendamiento() {
+    public List<AgendamientoDTO> listarAgendamiento(int codigoPlanta) {
         List<AgendamientoDTO> response = new ArrayList<>();
         AgendamientoDTO post;
 
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("AGENDAMIENTO").get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("AGENDAMIENTO").whereEqualTo("codigoPlanta", codigoPlanta).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
