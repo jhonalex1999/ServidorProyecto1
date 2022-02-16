@@ -21,7 +21,7 @@ import java.util.List;
  */
 public interface LaboratorioManagementService {
 
-    List<AgendamientoDTO> listarFranjaHoraria();
+    List<AgendamientoDTO> listarAgendamiento();
     
     List<LeyHookeDTO> listarDatosHardwareLeyDeHooke();
     
