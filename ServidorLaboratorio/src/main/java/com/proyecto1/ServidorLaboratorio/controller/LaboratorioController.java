@@ -61,9 +61,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.agregarParticipantes(post), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/listarAgendamiento")
-    public ResponseEntity listarAgendamiento() {
-        return new ResponseEntity(service.listarAgendamiento(), HttpStatus.OK);
+    @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
+    public ResponseEntity listarAgendamiento(@PathVariable(value = "codigoPlanta") int codigoPlanta) {
+        return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{idAgendamiento}/{codGrupal}/agregarHorario")
