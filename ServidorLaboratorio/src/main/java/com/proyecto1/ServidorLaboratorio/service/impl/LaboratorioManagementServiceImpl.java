@@ -177,13 +177,14 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         List<AgendamientoDTO> response = new ArrayList<>();
         AgendamientoDTO post;
 
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("FRANJA_HORARIA").get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("AGENDAMIENTO").get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 post = doc.toObject(AgendamientoDTO.class);
                 post.setIdFranja(doc.getId());
                 response.add(post);
+                System.out.println(response);
             }
             return response;
         } catch (Exception e) {
