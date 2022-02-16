@@ -15,7 +15,7 @@ import lombok.Data;
 public class ParticipantesDTO {
     private String id;
     private Integer codGrupal;
-    private Integer idUsuario;
+    private String correo;
     private String rol;
     private Integer estado;
 }
