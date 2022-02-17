@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,21 +49,59 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     private FirebaseInitializer firebase;
 
     @Override
-    public Boolean agregarParticipantes(ParticipantesDTO post) {
-        Map<String, Object> docData = getDocDataParticipantes(post);
-
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
+    public Integer agregarParticipantes(ArrayList<String> participantes) {
+           ApiFuture<WriteResult> writeResultApiFuture = null;
+           boolean existen=BuscarParticipantes(participantes);
+           if(existen==true){
+            for (int i = 0; i < participantes.size(); i++) {
+            ParticipantesDTO post = new ParticipantesDTO();
+            post.setCodGrupal(1);
+            post.setCorreo(participantes.get(i));
+            post.setEstado(0);
+            if(i==0){
+              post.setRol("Lider");
+            }else{
+            post.setRol("Observador");
+            }
+          
+            Map<String, Object> docData = getDocDataParticipantes(post);
+            writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
+        }
+      
+      
 
         try {
             if (null != writeResultApiFuture.get()) {
-                return Boolean.TRUE;
+                return 1;
             }
-            return Boolean.FALSE;
+            return -1;
         } catch (Exception e) {
-            return Boolean.FALSE;
+            return -1;
         }
+           }else{
+               return 0;
+           }
+       
     }
-
+    private Boolean BuscarParticipantes(ArrayList<String> participantes){
+        boolean bandera=false;
+        for (int i = 0; i < participantes.size(); i++) {
+           ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", participantes.get(i)).get();
+            try {
+                if (querySnapshotApiFuture.get().isEmpty()) {
+                    bandera=false;
+                    break;
+                }else{
+                    bandera =true;
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+         return bandera;
+    }
     @Override
     public List<LeyHookeDTO> listarDatosHardwareLeyDeHooke() {
         List<LeyHookeDTO> response = new ArrayList<>();
@@ -301,6 +340,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean buscarCompletitudEstudiantes(int codGrupal) {
         GrupoDTO grupo;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
+       
         int contados = 0;
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {

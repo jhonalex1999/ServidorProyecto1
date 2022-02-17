@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,8 +59,8 @@ public class LaboratorioController {
     }
 
     @PostMapping(value = "/agregarParticipantes")
-    public ResponseEntity agregarParticipantes(@RequestBody ParticipantesDTO post) {
-        return new ResponseEntity(service.agregarParticipantes(post), HttpStatus.OK);
+    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String>  participantes) {
+        return new ResponseEntity(service.agregarParticipantes(participantes), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")

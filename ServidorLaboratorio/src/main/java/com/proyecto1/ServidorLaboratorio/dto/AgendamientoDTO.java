@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 public class AgendamientoDTO {
-
+    private Integer idAgendamiento;
     private String idFranja;
     private Integer codGrupal;
     private String horaInicio;
