@@ -148,7 +148,7 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
                 grupo = doc.toObject(UsuarioDTO.class);
                 grupo.setId(doc.getId());
                 cursos = grupo.getCursos();
-                System.out.println(cursos);
+                //System.out.println(cursos);
                 return cursos;
             }
             //return cursos;

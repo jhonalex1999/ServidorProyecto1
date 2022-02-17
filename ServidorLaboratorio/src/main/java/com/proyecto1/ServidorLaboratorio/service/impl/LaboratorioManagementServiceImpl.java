@@ -281,23 +281,25 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
   
     private String BuscarAgendamiento(int idAgendamiento) {
-    String Agendamiento="vacio";
-    ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).get();
+        String Agendamiento = "vacio";
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                Agendamiento=doc.getId();
+                Agendamiento = doc.getId();
                 return Agendamiento;
-                
-            }   } catch (InterruptedException ex) {
+
+            }
+        } catch (InterruptedException ex) {
             Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
             Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-    return Agendamiento;
+        return Agendamiento;
     }
+
     @Override
     public Boolean buscarHorario(int idAgendamiento, int codGrupal) {
-        
+
         ApiFuture<QuerySnapshot> querySnapshotApiFutur = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).whereEqualTo("codGrupal", codGrupal).get();
         try {
             if (querySnapshotApiFutur.get().isEmpty()) {
@@ -333,20 +335,21 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean finalizarPractica(int codGrupal) {
         List<String> response = new ArrayList<>();
         response = buscarGrupo(codGrupal);
-        Boolean bandera =false;
-        for(int id=0;id<response.size();id++){
-      
+        Boolean bandera = false;
+        for (int id = 0; id < response.size(); id++) {
+
             ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(response.get(id)).delete();
             try {
                 if (null != writeResultApiFuture.get()) {
-                     bandera=true;
-                }else{
-                 bandera =false;}
+                    bandera = true;
+                } else {
+                    bandera = false;
+                }
             } catch (Exception e) {
-                 bandera=false;
+                bandera = false;
             }
-     }
-        
+        }
+
         return bandera;
     }
 
@@ -357,10 +360,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                 participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class);
                 participantes.setId(doc.getId());
                 response.add(participantes.getId());
-                
+
             }
             return response;
         } catch (Exception e) {
@@ -384,13 +387,29 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 }
             }
             //AQUI DEBE PONERSE DEPENDIENDO DEL NUMERO POR GRUPOS
-            if (contados == 4) {
+            if (contados == 2) {
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public String buscarQuienEsLider(String correo) {
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                return participantes.getRol();
+            }
+            return "";
+
+        } catch (Exception e) {
+            return "";
         }
     }
 
@@ -406,7 +425,5 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         docData.put("rol", post.getRol());
         return docData;
     }
-    
-    
 
 }

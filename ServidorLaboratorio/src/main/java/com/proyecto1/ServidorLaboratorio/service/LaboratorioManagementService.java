@@ -43,4 +43,6 @@ public interface LaboratorioManagementService {
     Boolean finalizarPractica(int codGrupal);
     
     Boolean buscarCompletitudEstudiantes(int codGrupal);
+    
+    String buscarQuienEsLider(String correo);
 }
