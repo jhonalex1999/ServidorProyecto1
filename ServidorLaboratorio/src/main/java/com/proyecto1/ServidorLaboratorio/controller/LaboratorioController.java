@@ -58,9 +58,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarDatosHardwareCaidaLibre(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/agregarParticipantes")
-    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String>  participantes) {
-        return new ResponseEntity(service.agregarParticipantes(participantes), HttpStatus.OK);
+    @PostMapping(value = "/{idFranja}/agregarParticipantes")
+    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String>  participantes,@PathVariable(value = "idFranja") Integer idFranja) {
+        return new ResponseEntity(service.agregarParticipantes(participantes,idFranja), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
@@ -68,11 +68,7 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{idAgendamiento}/{codGrupal}/agregarHorario")
-    public ResponseEntity agregarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
-        return new ResponseEntity(service.agregarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
-    }
-
+    
     @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
     public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
         return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);

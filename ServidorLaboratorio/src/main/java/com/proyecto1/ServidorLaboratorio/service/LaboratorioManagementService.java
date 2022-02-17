@@ -33,9 +33,8 @@ public interface LaboratorioManagementService {
 
     Boolean crearPdf();
     
-    Integer agregarParticipantes(ArrayList<String> participantes);
+    Integer agregarParticipantes(ArrayList<String> participantes,int idFranja);
 
-    Boolean agregarHorario(int idAgendamiento, int codGrupal);
 
     Boolean buscarHorario(int idAgendamiento, int codGrupal);
 
