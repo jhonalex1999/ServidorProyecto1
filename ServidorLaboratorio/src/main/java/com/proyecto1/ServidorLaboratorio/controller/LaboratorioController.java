@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,9 +58,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarDatosHardwareCaidaLibre(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/agregarParticipantes")
-    public ResponseEntity agregarParticipantes(@RequestBody ParticipantesDTO post) {
-        return new ResponseEntity(service.agregarParticipantes(post), HttpStatus.OK);
+    @PostMapping(value = "/{idFranja}/agregarParticipantes")
+    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String>  participantes,@PathVariable(value = "idFranja") Integer idFranja) {
+        return new ResponseEntity(service.agregarParticipantes(participantes,idFranja), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
@@ -66,11 +68,7 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{idAgendamiento}/{codGrupal}/agregarHorario")
-    public ResponseEntity agregarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
-        return new ResponseEntity(service.agregarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
-    }
-
+    
     @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
     public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
         return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
@@ -94,5 +92,10 @@ public class LaboratorioController {
     @GetMapping(value = "/{correo}/buscarQuienEsLider")
     public ResponseEntity buscarQuienEsLider(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.buscarQuienEsLider(correo), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{correo}/saberCodigoGrupo")
+    public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
     }
 }

@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +49,43 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     private FirebaseInitializer firebase;
 
     @Override
-    public Boolean agregarParticipantes(ParticipantesDTO post) {
-        Map<String, Object> docData = getDocDataParticipantes(post);
-
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
-
+    public Integer agregarParticipantes(ArrayList<String> participantes, int idFranja) {
+           ApiFuture<WriteResult> writeResultApiFuture = null;
+           int codGrupal=codGrupal();
+           boolean existen=BuscarParticipantes(participantes);
+           if(existen==true){
+            for (int i = 0; i < participantes.size(); i++) {
+            ParticipantesDTO post = new ParticipantesDTO();
+           
+            post.setCodGrupal(codGrupal);
+            post.setCorreo(participantes.get(i));
+            post.setEstado(0);
+            if(i==0){
+              post.setRol("Lider");
+            }else{
+            post.setRol("Observador");
+            }
+            Map<String, Object> docData = getDocDataParticipantes(post);
+            writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
+        }
+        try {
+            if (null != writeResultApiFuture.get()) {
+                agregarHorario(idFranja,codGrupal);
+                return 1;
+            }
+            return -1;
+        } catch (Exception e) {
+            return -1;
+        }
+           }else{
+               return 0;
+           }
+       
+    }
+    private Boolean agregarHorario(int idAgendamiento, int codGrupal) {
+        String Agendamiento=BuscarAgendamiento(idAgendamiento);
+       
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal,"estadoDisposicion",false);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -61,8 +94,62 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         } catch (Exception e) {
             return Boolean.FALSE;
         }
-    }
 
+     
+        
+    }
+    private Boolean BuscarParticipantes(ArrayList<String> participantes){
+        boolean bandera=false;
+        for (int i = 0; i < participantes.size(); i++) {
+           ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", participantes.get(i)).get();
+            try {
+                if (querySnapshotApiFuture.get().isEmpty()) {
+                    bandera=false;
+                    break;
+                }else{
+                    bandera =true;
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+         return bandera;
+    }
+    private int codGrupal() {
+        ParticipantesDTO participantes;
+        List<Integer> codActuales = new ArrayList<>();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                codActuales.add(participantes.getCodGrupal());
+                
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(UsuarioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(UsuarioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (codActuales.isEmpty()) {
+            return 1;
+        } else {
+            
+            int mayor = codActuales.get(0);
+		// Recorrer arreglo y ver si no es así
+		// (comenzar desde el 1 porque el 0 ya lo tenemos contemplado arriba)
+		for (int x = 1; x < codActuales.size(); x++) {
+			if (codActuales.get(x) > mayor) {
+				mayor = codActuales.get(x);
+			}
+		}
+            int codigo=mayor+1;
+            
+            return codigo;
+        }
+    }
+    
     @Override
     public List<LeyHookeDTO> listarDatosHardwareLeyDeHooke() {
         List<LeyHookeDTO> response = new ArrayList<>();
@@ -192,22 +279,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    @Override
-    public Boolean agregarHorario(int idAgendamiento, int codGrupal) {
-        String Agendamiento = BuscarAgendamiento(idAgendamiento);
-
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal, "estadoDisposicion", false);
-        try {
-            if (null != writeResultApiFuture.get()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (Exception e) {
-            return Boolean.FALSE;
-        }
-
-    }
-
+  
     private String BuscarAgendamiento(int idAgendamiento) {
         String Agendamiento = "vacio";
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).get();
@@ -303,6 +375,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean buscarCompletitudEstudiantes(int codGrupal) {
         GrupoDTO grupo;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
+       
         int contados = 0;
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
@@ -337,6 +410,22 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         } catch (Exception e) {
             return "";
+        }
+    }
+
+    @Override
+    public Integer saberCodigoGrupo(String correo) {
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                return participantes.getCodGrupal();
+            }
+            return 0;
+
+        } catch (Exception e) {
+            return -1;
         }
     }
 

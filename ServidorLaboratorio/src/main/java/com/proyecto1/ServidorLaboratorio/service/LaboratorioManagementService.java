@@ -13,6 +13,8 @@ import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,9 +33,8 @@ public interface LaboratorioManagementService {
 
     Boolean crearPdf();
     
-    Boolean agregarParticipantes(ParticipantesDTO post);
+    Integer agregarParticipantes(ArrayList<String> participantes,int idFranja);
 
-    Boolean agregarHorario(int idAgendamiento, int codGrupal);
 
     Boolean buscarHorario(int idAgendamiento, int codGrupal);
 
@@ -44,4 +45,6 @@ public interface LaboratorioManagementService {
     Boolean buscarCompletitudEstudiantes(int codGrupal);
     
     String buscarQuienEsLider(String correo);
+    
+    Integer saberCodigoGrupo(String correo);
 }
