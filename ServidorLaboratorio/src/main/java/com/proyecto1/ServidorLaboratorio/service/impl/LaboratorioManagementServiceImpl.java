@@ -413,6 +413,22 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
+    @Override
+    public Integer saberCodigoGrupo(String correo) {
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                return participantes.getCodGrupal();
+            }
+            return 0;
+
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
     private CollectionReference getCollection(String Colecion) {
         return firebase.getFirestore().collection(Colecion);
     }

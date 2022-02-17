@@ -93,4 +93,9 @@ public class LaboratorioController {
     public ResponseEntity buscarQuienEsLider(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.buscarQuienEsLider(correo), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{correo}/saberCodigoGrupo")
+    public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
+    }
 }
