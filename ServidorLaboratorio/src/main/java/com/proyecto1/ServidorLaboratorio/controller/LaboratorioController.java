@@ -88,4 +88,14 @@ public class LaboratorioController {
     public ResponseEntity buscarCompletitudEstudiantes(@PathVariable(value = "codCurso") int codCurso) {
         return new ResponseEntity(service.buscarCompletitudEstudiantes(codCurso), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{correo}/buscarQuienEsLider")
+    public ResponseEntity buscarQuienEsLider(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.buscarQuienEsLider(correo), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{correo}/saberCodigoGrupo")
+    public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
+    }
 }
