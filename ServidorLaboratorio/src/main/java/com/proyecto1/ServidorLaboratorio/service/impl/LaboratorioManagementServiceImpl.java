@@ -387,7 +387,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 }
             }
             //AQUI DEBE PONERSE DEPENDIENDO DEL NUMERO POR GRUPOS
-            if (contados == 2) {
+            if (contados == 3) {
                 return true;
             } else {
                 return false;
