@@ -5,6 +5,7 @@
  */
 package com.proyecto1.ServidorLaboratorio.service;
 
+import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface PracticaManagementService {
     
     List<PracticaDTO> listarPracticas();
-    
+    Boolean verificarAgendamiento(int codGrupal);
     Boolean add(PostDTO post);
     Boolean edit(String id, PostDTO post);
     Boolean delete(String id);
