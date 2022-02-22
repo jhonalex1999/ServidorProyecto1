@@ -98,4 +98,14 @@ public class LaboratorioController {
     public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteEntrada")
+    public ResponseEntity cambiarEstadoParticipanteEntrada(@PathVariable (value = "correo") String correo) {
+        return new ResponseEntity(service.cambiarEstadoParticipanteEntrada(correo), HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteSalida")
+    public ResponseEntity cambiarEstadoParticipanteSalida(@PathVariable (value = "correo") String correo) {
+        return new ResponseEntity(service.cambiarEstadoParticipanteSalida(correo), HttpStatus.OK);
+    }
 }

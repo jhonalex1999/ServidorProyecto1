@@ -47,4 +47,8 @@ public interface LaboratorioManagementService {
     String buscarQuienEsLider(String correo);
     
     Integer saberCodigoGrupo(String correo);
+    
+    Boolean cambiarEstadoParticipanteEntrada(String correo);
+    
+    Boolean cambiarEstadoParticipanteSalida(String correo);
 }
