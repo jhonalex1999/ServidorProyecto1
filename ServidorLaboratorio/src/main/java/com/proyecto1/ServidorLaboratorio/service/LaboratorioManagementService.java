@@ -47,4 +47,6 @@ public interface LaboratorioManagementService {
     String buscarQuienEsLider(String correo);
     
     Integer saberCodigoGrupo(String correo);
+    
+    Boolean reportarError(int idLaboratorio, String descripcion);
 }

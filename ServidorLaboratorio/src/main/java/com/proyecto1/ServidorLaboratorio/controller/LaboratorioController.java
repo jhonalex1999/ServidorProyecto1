@@ -59,8 +59,8 @@ public class LaboratorioController {
     }
 
     @PostMapping(value = "/{idFranja}/agregarParticipantes")
-    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String>  participantes,@PathVariable(value = "idFranja") Integer idFranja) {
-        return new ResponseEntity(service.agregarParticipantes(participantes,idFranja), HttpStatus.OK);
+    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String> participantes, @PathVariable(value = "idFranja") Integer idFranja) {
+        return new ResponseEntity(service.agregarParticipantes(participantes, idFranja), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
@@ -68,7 +68,6 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
     }
 
-    
     @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
     public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
         return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
@@ -97,5 +96,10 @@ public class LaboratorioController {
     @GetMapping(value = "/{correo}/saberCodigoGrupo")
     public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/{idLaboratorio}/{problema}/reportarError")
+    public ResponseEntity reportarError(@PathVariable(value = "idLaboratorio") int idLaboratorio, @PathVariable(value = "problema") String problema) {
+        return new ResponseEntity(service.reportarError(idLaboratorio, problema), HttpStatus.OK);
     }
 }
