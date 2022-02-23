@@ -152,7 +152,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
                   }else{
                       return false;
                   }
-              }else if (hora > horaInBd &hora < horaFinBd){
+              }else if (hora > horaInBd && hora < horaFinBd){
                   return true;
               }
             } else {
