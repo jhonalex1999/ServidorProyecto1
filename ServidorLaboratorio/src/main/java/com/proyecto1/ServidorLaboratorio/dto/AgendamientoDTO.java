@@ -16,11 +16,9 @@ public class AgendamientoDTO {
     private Integer idAgendamiento;
     private String idFranja;
     private Integer codGrupal;
-    private Integer horaInicio;
-    private Integer horaFin;
+    private String horaInicio;
+    private String horaFin;
     private Integer codigoPlanta;
     private Boolean estadoDisposicion;
-    private Integer dia;
-    private Integer mes;
-    private Integer anio;
+    private String fecha;
 }

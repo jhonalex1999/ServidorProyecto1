@@ -125,8 +125,36 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
                 int minuto=hoy.getMinute();
                 int hora=hoy.getHour();
                 
-            if(dia == Agendamiento.getDia() && mes == Agendamiento.getMes() && anio == Agendamiento.getAnio() && hora >= Agendamiento.getHoraInicio() && hora < Agendamiento.getHoraFin()){
-                return true;
+                String fecha=Agendamiento.getFecha();
+                
+                int AnioBd=Integer.parseInt(fecha.split("-")[0]);
+                int MesBd=Integer.parseInt(fecha.split("-")[1]);
+                int DiaBd=Integer.parseInt(fecha.split("-")[2]);
+                
+                String horaInicio=Agendamiento.getHoraInicio();
+                String horaFinal=Agendamiento.getHoraFin();
+                
+                int horaInBd=Integer.parseInt(horaInicio.split(":")[0]);
+                int MinutosInBd=Integer.parseInt(horaInicio.split(":")[1]);  
+                int horaFinBd=Integer.parseInt(horaFinal.split(":")[0]);
+                int MinutosFinBd=Integer.parseInt(horaFinal.split(":")[1]);  
+                
+            if(dia == DiaBd && mes == MesBd && anio == AnioBd){
+              if(hora == horaInBd  ){
+                 if(minuto >= MinutosInBd ){
+                   return true;
+                }else{
+                   return false;
+                }
+              } else if (hora == horaFinBd){
+                  if(minuto < MinutosFinBd){
+                      return true;
+                  }else{
+                      return false;
+                  }
+              }else if (hora > horaInBd &hora < horaFinBd){
+                  return true;
+              }
             } else {
                 return false;
             }
@@ -134,8 +162,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
         } catch (Exception e) {
              return false;
         }
-    
-     
+        return false;     
     }
 
 
