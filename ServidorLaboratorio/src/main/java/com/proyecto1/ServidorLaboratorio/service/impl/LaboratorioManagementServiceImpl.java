@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
@@ -50,42 +51,43 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Integer agregarParticipantes(ArrayList<String> participantes, int idFranja) {
-           ApiFuture<WriteResult> writeResultApiFuture = null;
-           int codGrupal=codGrupal();
-           boolean existen=BuscarParticipantes(participantes);
-           if(existen==true){
+        ApiFuture<WriteResult> writeResultApiFuture = null;
+        int codGrupal = codGrupal();
+        boolean existen = BuscarParticipantes(participantes);
+        if (existen == true) {
             for (int i = 0; i < participantes.size(); i++) {
-            ParticipantesDTO post = new ParticipantesDTO();
-           
-            post.setCodGrupal(codGrupal);
-            post.setCorreo(participantes.get(i));
-            post.setEstado(0);
-            if(i==0){
-              post.setRol("Lider");
-            }else{
-            post.setRol("Observador");
+                ParticipantesDTO post = new ParticipantesDTO();
+
+                post.setCodGrupal(codGrupal);
+                post.setCorreo(participantes.get(i));
+                post.setEstado(0);
+                if (i == 0) {
+                    post.setRol("Lider");
+                } else {
+                    post.setRol("Observador");
+                }
+                Map<String, Object> docData = getDocDataParticipantes(post);
+                writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
             }
-            Map<String, Object> docData = getDocDataParticipantes(post);
-            writeResultApiFuture = getCollection("PARTICIPANTES").document().create(docData);
-        }
-        try {
-            if (null != writeResultApiFuture.get()) {
-                agregarHorario(idFranja,codGrupal);
-                return 1;
+            try {
+                if (null != writeResultApiFuture.get()) {
+                    agregarHorario(idFranja, codGrupal);
+                    return 1;
+                }
+                return -1;
+            } catch (Exception e) {
+                return -1;
             }
-            return -1;
-        } catch (Exception e) {
-            return -1;
+        } else {
+            return 0;
         }
-           }else{
-               return 0;
-           }
-       
+
     }
+
     private Boolean agregarHorario(int idAgendamiento, int codGrupal) {
-        String Agendamiento=BuscarAgendamiento(idAgendamiento);
-       
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal,"estadoDisposicion",false);
+        String Agendamiento = BuscarAgendamiento(idAgendamiento);
+
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("AGENDAMIENTO").document(Agendamiento).update("codGrupal", codGrupal, "estadoDisposicion", false);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -95,19 +97,18 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         }
 
-     
-        
     }
-    private Boolean BuscarParticipantes(ArrayList<String> participantes){
-        boolean bandera=false;
+
+    private Boolean BuscarParticipantes(ArrayList<String> participantes) {
+        boolean bandera = false;
         for (int i = 0; i < participantes.size(); i++) {
-           ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", participantes.get(i)).get();
+            ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", participantes.get(i)).get();
             try {
                 if (querySnapshotApiFuture.get().isEmpty()) {
-                    bandera=false;
+                    bandera = false;
                     break;
-                }else{
-                    bandera =true;
+                } else {
+                    bandera = true;
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,8 +116,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         return bandera;
+        return bandera;
     }
+
     private int codGrupal() {
         ParticipantesDTO participantes;
         List<Integer> codActuales = new ArrayList<>();
@@ -125,7 +127,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 participantes = doc.toObject(ParticipantesDTO.class);
                 codActuales.add(participantes.getCodGrupal());
-                
+
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(UsuarioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,21 +137,21 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         if (codActuales.isEmpty()) {
             return 1;
         } else {
-            
+
             int mayor = codActuales.get(0);
-		// Recorrer arreglo y ver si no es así
-		// (comenzar desde el 1 porque el 0 ya lo tenemos contemplado arriba)
-		for (int x = 1; x < codActuales.size(); x++) {
-			if (codActuales.get(x) > mayor) {
-				mayor = codActuales.get(x);
-			}
-		}
-            int codigo=mayor+1;
-            
+            // Recorrer arreglo y ver si no es así
+            // (comenzar desde el 1 porque el 0 ya lo tenemos contemplado arriba)
+            for (int x = 1; x < codActuales.size(); x++) {
+                if (codActuales.get(x) > mayor) {
+                    mayor = codActuales.get(x);
+                }
+            }
+            int codigo = mayor + 1;
+
             return codigo;
         }
     }
-    
+
     @Override
     public List<LeyHookeDTO> listarDatosHardwareLeyDeHooke() {
         List<LeyHookeDTO> response = new ArrayList<>();
@@ -209,14 +211,14 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean crearPdf() {
-        List<PostDTO> response = new ArrayList<>();
-        PostDTO post;
+        List<Laboratorio_Caida_LibreDTO> response = new ArrayList<>();
+        Laboratorio_Caida_LibreDTO post;
 
         Document documento = new Document();
 
         String ruta = System.getProperty("user.home");
         try {
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Downloads/Prueba.pdf"));
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Downloads/Datos_Practica_Caida_Libre.pdf"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PracticaManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException ex) {
@@ -225,15 +227,15 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         documento.open();
 
         PdfPTable tabla = new PdfPTable(3);
-        tabla.addCell("id");
-        tabla.addCell("titulo");
-        tabla.addCell("contenido");
+        tabla.addCell("altura");
+        tabla.addCell("numLanzamientos");
+        tabla.addCell("tiempo");
 
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("post").get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("LABORATORIO_CAIDA_LIBRE").get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                post = doc.toObject(PostDTO.class);
+                post = doc.toObject(Laboratorio_Caida_LibreDTO.class);
                 post.setId(doc.getId());
                 response.add(post);
             }
@@ -244,9 +246,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
 
         for (int i = 0; i < response.size(); i++) {
-            tabla.addCell(response.get(i).getId());
-            tabla.addCell(response.get(i).getTitle());
-            tabla.addCell(response.get(i).getContent());
+            tabla.addCell(String.valueOf(response.get(i).getAltura()));
+            tabla.addCell(String.valueOf(response.get(i).getTiempo()));
+            tabla.addCell(String.valueOf(response.get(i).getNumLanzamientos()));
 
         }
         try {
@@ -279,7 +281,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-  
     private String BuscarAgendamiento(int idAgendamiento) {
         String Agendamiento = "vacio";
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("idAgendamiento", idAgendamiento).get();
@@ -375,7 +376,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean buscarCompletitudEstudiantes(int codGrupal) {
         GrupoDTO grupo;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
-       
+
         int contados = 0;
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
