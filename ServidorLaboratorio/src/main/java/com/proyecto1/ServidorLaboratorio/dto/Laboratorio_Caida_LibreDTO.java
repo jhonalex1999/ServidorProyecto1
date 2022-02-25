@@ -12,13 +12,9 @@ import lombok.Data;
  * @author julio
  */
 @Data
-public class AgendamientoDTO {
-    private Integer idAgendamiento;
-    private String idFranja;
-    private Integer codGrupal;
-    private String horaInicio;
-    private String horaFin;
-    private Integer codigoPlanta;
-    private Boolean estadoDisposicion;
-    private String fecha;
+public class Laboratorio_Caida_LibreDTO {
+    private String id;
+    private Integer altura;
+    private Integer numLanzamientos;
+    private Integer tiempo;
 }

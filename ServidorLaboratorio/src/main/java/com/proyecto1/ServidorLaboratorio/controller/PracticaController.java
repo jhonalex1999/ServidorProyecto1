@@ -37,6 +37,10 @@ public class PracticaController {
     public ResponseEntity listarPracticas(){
         return new ResponseEntity(service.listarPracticas(), HttpStatus.OK);
     }
+    @GetMapping(value = "/{codGrupal}/verificarAgendamiento")
+    public ResponseEntity verificarAgendamiento(@PathVariable(value = "codGrupal") int codGrupal){
+        return new ResponseEntity(service.verificarAgendamiento(codGrupal), HttpStatus.OK);
+    }
     
     @PostMapping(value = "/add")
     public ResponseEntity add(@RequestBody PostDTO post){
