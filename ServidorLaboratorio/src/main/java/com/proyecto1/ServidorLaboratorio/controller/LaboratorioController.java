@@ -101,6 +101,7 @@ public class LaboratorioController {
     @PostMapping(value = "/{idLaboratorio}/{problema}/reportarError")
     public ResponseEntity reportarError(@PathVariable(value = "idLaboratorio") int idLaboratorio, @PathVariable(value = "problema") String problema) {
         return new ResponseEntity(service.reportarError(idLaboratorio, problema), HttpStatus.OK);
+    }
     
     @GetMapping(value = "/{correo}/cambiarEstadoParticipanteEntrada")
     public ResponseEntity cambiarEstadoParticipanteEntrada(@PathVariable (value = "correo") String correo) {
