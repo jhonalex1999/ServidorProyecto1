@@ -49,4 +49,7 @@ public interface LaboratorioManagementService {
     Integer saberCodigoGrupo(String correo);
     
     Boolean reportarError(int idLaboratorio, String descripcion);
+    Boolean cambiarEstadoParticipanteEntrada(String correo);
+    
+    Boolean cambiarEstadoParticipanteSalida(String correo);
 }
