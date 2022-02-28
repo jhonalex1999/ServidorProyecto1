@@ -464,7 +464,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     public Boolean cambiarEstadoParticipanteEntrada(String correo) {
         String Participante=BuscarParticipante(correo);
        
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 11);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 1);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
