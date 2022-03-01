@@ -9,6 +9,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.itextpdf.text.Document;
@@ -297,7 +298,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return Agendamiento;
     }
-    
 
     @Override
     public Boolean buscarHorario(int idAgendamiento, int codGrupal) {
@@ -336,13 +336,25 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public Boolean finalizarPractica(int codGrupal) {
         List<String> response = new ArrayList<>();
+        List<String> agendamiento = new ArrayList<>();
+        List<String> nombres = new ArrayList<>();
         response = buscarGrupo(codGrupal);
+        agendamiento = buscarAgendamiento(codGrupal);
         Boolean bandera = false;
+        Map<String, Object> docData = new HashMap<>();
+        nombres = obtenerNombresEstudiantes(codGrupal);
+        docData.put("codGrupal", codGrupal);
+        docData.put("nombres", nombres);
+        ApiFuture<WriteResult> writeResultApiFutureHistorial = getCollection("HISTORIAL").document().create(docData);
+        //ApiFuture<WriteResult> writeResultApiFutureNombres = getCollection("HISTORIAL").document(Agendamiento).update("codGrupal", codGrupal, "nombres", FieldValue.arrayUnion(nombres));
+        for (int i = 0; i < agendamiento.size(); i++) {
+            ApiFuture<WriteResult> writeResultApiFutureAgendamiento = getCollection("AGENDAMIENTO").document(agendamiento.get(i)).delete();
+        }
         for (int id = 0; id < response.size(); id++) {
 
             ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(response.get(id)).delete();
             try {
-                if (null != writeResultApiFuture.get()) {
+                if (null != writeResultApiFutureHistorial.get()) {
                     bandera = true;
                 } else {
                     bandera = false;
@@ -351,8 +363,44 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 bandera = false;
             }
         }
-
         return bandera;
+    }
+
+    public ArrayList<String> obtenerNombresEstudiantes(int codGrupal) {
+        ArrayList<String> nombres = new ArrayList();
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes.setId(doc.getId());
+                nombres.add(participantes.getCorreo());
+                //System.out.println(cursos);
+            }
+            return nombres;
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private List<String> buscarAgendamiento(int codGrupal) {
+        List<String> response = new ArrayList<>();
+        ParticipantesDTO participantes;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes.setId(doc.getId());
+                response.add(participantes.getId());
+
+            }
+            return response;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private List<String> buscarGrupo(int codGrupal) {
@@ -432,7 +480,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean reportarError(int idLaboratorio, String descripcion){
+    public Boolean reportarError(int idLaboratorio, String descripcion) {
         Map<String, Object> docData = new HashMap<>();
         docData.put("idLaboratorio", idLaboratorio);
         docData.put("problema", descripcion);
@@ -446,7 +494,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         }
     }
-    
+
     private CollectionReference getCollection(String Colecion) {
         return firebase.getFirestore().collection(Colecion);
     }
@@ -462,8 +510,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean cambiarEstadoParticipanteEntrada(String correo) {
-        String Participante=BuscarParticipante(correo);
-       
+        String Participante = BuscarParticipante(correo);
+
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 1);
         try {
             if (null != writeResultApiFuture.get()) {
@@ -474,11 +522,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         }
     }
-    
+
     @Override
     public Boolean cambiarEstadoParticipanteSalida(String correo) {
-        String Participante=BuscarParticipante(correo);
-       
+        String Participante = BuscarParticipante(correo);
+
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 0);
         try {
             if (null != writeResultApiFuture.get()) {
@@ -489,7 +537,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         }
     }
-    
+
     private String BuscarParticipante(String correo) {
         String Participante = "vacio";
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();

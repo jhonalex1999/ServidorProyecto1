@@ -52,4 +52,5 @@ public interface LaboratorioManagementService {
     Boolean cambiarEstadoParticipanteEntrada(String correo);
     
     Boolean cambiarEstadoParticipanteSalida(String correo);
+   
 }
