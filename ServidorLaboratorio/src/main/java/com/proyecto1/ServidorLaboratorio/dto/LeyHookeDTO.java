@@ -5,6 +5,7 @@
  */
 package com.proyecto1.ServidorLaboratorio.dto;
 
+import java.util.ArrayList;
 import lombok.Data;
 
 /**
@@ -15,5 +16,7 @@ import lombok.Data;
 @Data
 public class LeyHookeDTO {
     private String id;
-    private Integer elongacion;
+    private Integer codigo_planta;
+    private ArrayList<String> rangos_elongacion;
+    private ArrayList<String> rangos_fuerza;
 }

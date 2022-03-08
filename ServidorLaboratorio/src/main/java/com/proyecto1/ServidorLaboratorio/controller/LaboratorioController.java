@@ -38,11 +38,10 @@ public class LaboratorioController {
     @Autowired
     private LaboratorioManagementService service;
 
-    @GetMapping(value = "/pdf")
+    /*@GetMapping(value = "/pdf")
     public ResponseEntity pdf() {
         return new ResponseEntity(service.crearPdf(), HttpStatus.OK);
-    }
-
+    }*/
     @GetMapping(value = "/listarDatosHardwareLeyDeHooke")
     public ResponseEntity listarDatosHardwareLeyDeHooke() {
         return new ResponseEntity(service.listarDatosHardwareLeyDeHooke(), HttpStatus.OK);
@@ -99,8 +98,8 @@ public class LaboratorioController {
     }
 
     @PostMapping(value = "/{idLaboratorio}/{problema}/reportarError")
-    public ResponseEntity reportarError(@PathVariable(value = "idLaboratorio") int idLaboratorio, @PathVariable(value = "problema") String problema) {
-        return new ResponseEntity(service.reportarError(idLaboratorio, problema), HttpStatus.OK);
+    public ResponseEntity reportarError(@PathVariable(value = "cod_planta") int cod_planta, @PathVariable(value = "problema") String problema) {
+        return new ResponseEntity(service.reportarError(cod_planta, problema), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{correo}/cambiarEstadoParticipanteEntrada")
@@ -111,6 +110,31 @@ public class LaboratorioController {
     @GetMapping(value = "/{correo}/cambiarEstadoParticipanteSalida")
     public ResponseEntity cambiarEstadoParticipanteSalida(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.cambiarEstadoParticipanteSalida(correo), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigo_planta}/listar_Altura_CL")
+    public ResponseEntity listar_Altura_CL(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Altura_CL(codigo_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigo_planta}/listar_Elongacion_LH")
+    public ResponseEntity listar_Elongacion_LH(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Elongacion_LH(codigo_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigo_planta}/listar_Fuerza_LH")
+    public ResponseEntity listar_Fuerza_LH(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Fuerza_LH(codigo_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigo_planta}/listar_Angulo_MP")
+    public ResponseEntity listar_Angulo_MP(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Angulo_MP(codigo_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigo_planta}/listar_Velocidad_MP")
+    public ResponseEntity listar_Velocidad_MP(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Velocidad_MP(codigo_planta), HttpStatus.OK);
     }
 
 }

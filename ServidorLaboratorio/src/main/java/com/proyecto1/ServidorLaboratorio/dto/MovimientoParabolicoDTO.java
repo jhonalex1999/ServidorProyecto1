@@ -5,6 +5,7 @@
  */
 package com.proyecto1.ServidorLaboratorio.dto;
 
+import java.util.ArrayList;
 import lombok.Data;
 
 /**
@@ -16,6 +17,7 @@ import lombok.Data;
 public class MovimientoParabolicoDTO {
 
     private String id;
-    private Integer Xmax;
-    private Integer Ymax;
+    private Integer codigo_planta;
+    private ArrayList<String> rango_angulo;
+    private ArrayList<String> rango_velocidad;
 }

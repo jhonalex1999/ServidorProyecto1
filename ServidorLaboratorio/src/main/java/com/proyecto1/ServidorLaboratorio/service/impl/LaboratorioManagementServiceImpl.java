@@ -19,7 +19,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
@@ -211,7 +210,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    @Override
+    /*@Override
     public Boolean crearPdf() {
         List<Laboratorio_Caida_LibreDTO> response = new ArrayList<>();
         Laboratorio_Caida_LibreDTO post;
@@ -248,9 +247,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
 
         for (int i = 0; i < response.size(); i++) {
-            tabla.addCell(String.valueOf(response.get(i).getAltura()));
-            tabla.addCell(String.valueOf(response.get(i).getTiempo()));
-            tabla.addCell(String.valueOf(response.get(i).getNumLanzamientos()));
+            //tabla.addCell(String.valueOf(response.get(i).getAltura()));
+            //tabla.addCell(String.valueOf(response.get(i).getTiempo()));
+            //tabla.addCell(String.valueOf(response.get(i).getNumLanzamientos()));
 
         }
         try {
@@ -261,8 +260,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         documento.close();
 
         return Boolean.TRUE;
-    }
-
+    }*/
     @Override
     public List<AgendamientoDTO> listarAgendamiento(int codigoPlanta) {
         List<AgendamientoDTO> response = new ArrayList<>();
@@ -481,9 +479,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean reportarError(int idLaboratorio, String descripcion) {
+    public Boolean reportarError(int cod_planta, String descripcion) {
         Map<String, Object> docData = new HashMap<>();
-        docData.put("idLaboratorio", idLaboratorio);
+        docData.put("codigo_planta", cod_planta);
         docData.put("problema", descripcion);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMA").document().create(docData);
         try {
@@ -554,26 +552,100 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return Participante;
     }
-    
-    /*@Override
-    public ArrayList<String> listarDatos(i){
-        ArrayList<String> cursos;
-        UsuarioDTO grupo;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo",).get();
 
+    @Override
+    public ArrayList<String> listar_Altura_CL(int codigo_planta) {
+        ArrayList<String> rangos_altura;
+        CaidaLibreDTO laboratorio_caida_libre;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                grupo = doc.toObject(UsuarioDTO.class);
-                grupo.setId(doc.getId());
-                cursos = grupo.getCursos();
-                //System.out.println(cursos);
-                return cursos;
+                laboratorio_caida_libre = doc.toObject(CaidaLibreDTO.class);
+                laboratorio_caida_libre.setId(doc.getId());
+                rangos_altura = laboratorio_caida_libre.getRangos_altura();
+                return rangos_altura;
             }
             //return cursos;
         } catch (Exception e) {
             return null;
         }
         return null;
-    }*/
+    }
+
+    @Override
+    public ArrayList<String> listar_Elongacion_LH(int codigo_planta) {
+        ArrayList<String> rangos_elongacion;
+        LeyHookeDTO laboratorio_ley_hooke;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class);
+                laboratorio_ley_hooke.setId(doc.getId());
+                rangos_elongacion = laboratorio_ley_hooke.getRangos_elongacion();
+                return rangos_elongacion;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> listar_Fuerza_LH(int codigo_planta) {
+        ArrayList<String> rangos_fuerza;
+        LeyHookeDTO laboratorio_ley_hooke;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class);
+                laboratorio_ley_hooke.setId(doc.getId());
+                rangos_fuerza = laboratorio_ley_hooke.getRangos_fuerza();
+                return rangos_fuerza;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> listar_Angulo_MP(int codigo_planta) {
+        ArrayList<String> rangos_angulo;
+        MovimientoParabolicoDTO laboratorio_movimiento_parabolico;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
+                laboratorio_movimiento_parabolico.setId(doc.getId());
+                rangos_angulo = laboratorio_movimiento_parabolico.getRango_angulo();
+                return rangos_angulo;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> listar_Velocidad_MP(int codigo_planta) {
+        ArrayList<String> rangos_velocidad;
+        MovimientoParabolicoDTO laboratorio_movimiento_parabolico;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
+                laboratorio_movimiento_parabolico.setId(doc.getId());
+                rangos_velocidad = laboratorio_movimiento_parabolico.getRango_velocidad();
+                return rangos_velocidad;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
 
 }

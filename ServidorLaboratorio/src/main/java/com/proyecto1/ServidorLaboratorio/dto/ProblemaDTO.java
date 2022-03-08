@@ -14,6 +14,6 @@ import lombok.Data;
 @Data
 public class ProblemaDTO {
     private String id;
-    private int idLaboratorio;
+    private int cod_planta;
     private String descripcion;
 }

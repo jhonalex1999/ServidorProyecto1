@@ -31,7 +31,7 @@ public interface LaboratorioManagementService {
     
     List<CaidaLibreDTO> listarDatosHardwareCaidaLibre();
 
-    Boolean crearPdf();
+    //Boolean crearPdf();
     
     Integer agregarParticipantes(ArrayList<String> participantes,int idFranja);
 
@@ -53,6 +53,14 @@ public interface LaboratorioManagementService {
     
     Boolean cambiarEstadoParticipanteSalida(String correo);
     
-    //ArrayList<String> listarDatos();
+    ArrayList<String> listar_Altura_CL(int codigo_planta);
+    
+    ArrayList<String> listar_Elongacion_LH(int codigo_planta);
+    
+    ArrayList<String> listar_Fuerza_LH(int codigo_planta);
+    
+    ArrayList<String> listar_Angulo_MP(int codigo_planta);
+    
+    ArrayList<String> listar_Velocidad_MP(int codigo_planta);
    
 }
