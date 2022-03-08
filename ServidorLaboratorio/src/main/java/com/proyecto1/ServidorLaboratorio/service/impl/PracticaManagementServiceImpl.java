@@ -109,9 +109,9 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     }
 
     @Override
-    public Boolean verificarAgendamiento(int codGrupal) {
+    public Boolean verificarAgendamiento(int codGrupal, int codigoPlanta) {
         AgendamientoDTO Agendamiento = new  AgendamientoDTO();
-         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).get();
+         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).whereEqualTo("codigoPlanta", codigoPlanta).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {

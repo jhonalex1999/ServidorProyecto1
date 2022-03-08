@@ -13,7 +13,7 @@ import java.util.List;
 public interface PracticaManagementService {
     
     List<PracticaDTO> listarPracticas();
-    Boolean verificarAgendamiento(int codGrupal);
+    Boolean verificarAgendamiento(int codGrupal, int codigoPlanta);
     Boolean add(PostDTO post);
     Boolean edit(String id, PostDTO post);
     Boolean delete(String id);
