@@ -25,6 +25,7 @@ import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
+import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -348,7 +349,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<WriteResult> writeResultApiFutureHistorial = getCollection("HISTORIAL").document().create(docData);
         //ApiFuture<WriteResult> writeResultApiFutureNombres = getCollection("HISTORIAL").document(Agendamiento).update("codGrupal", codGrupal, "nombres", FieldValue.arrayUnion(nombres));
         for (int i = 0; i < agendamiento.size(); i++) {
-            ApiFuture<WriteResult> writeResultApiFutureAgendamiento = getCollection("AGENDAMIENTO").document(agendamiento.get(i)).delete();
+            //ApiFuture<WriteResult> writeResultApiFutureAgendamiento = getCollection("AGENDAMIENTO").document(agendamiento.get(i)).delete();
         }
         for (int id = 0; id < response.size(); id++) {
 
@@ -553,5 +554,26 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return Participante;
     }
+    
+    /*@Override
+    public ArrayList<String> listarDatos(i){
+        ArrayList<String> cursos;
+        UsuarioDTO grupo;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo",).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                grupo = doc.toObject(UsuarioDTO.class);
+                grupo.setId(doc.getId());
+                cursos = grupo.getCursos();
+                //System.out.println(cursos);
+                return cursos;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }*/
 
 }
