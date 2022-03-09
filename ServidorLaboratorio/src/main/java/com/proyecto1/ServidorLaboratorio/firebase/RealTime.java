@@ -6,6 +6,7 @@
 package com.proyecto1.ServidorLaboratorio.firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Acl.User;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -15,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +31,7 @@ public class RealTime {
       
        DataSnapshot Consultas;
         Object Coleccion;
+        DatabaseReference ref;
 
         @PostConstruct
         private  void conectarReal() throws IOException {
@@ -45,7 +49,7 @@ public class RealTime {
         FirebaseApp prueba = FirebaseApp.initializeApp(options,"secondary");
 
     // As an admin, the app has access to read and write all data, regardless of Security Rules
-          DatabaseReference ref = FirebaseDatabase.getInstance(prueba).getReference();
+        ref = FirebaseDatabase.getInstance(prueba).getReference();
               
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -63,6 +67,12 @@ public class RealTime {
          return document;
     }
   
+    public void iniciar(){
+        DatabaseReference hopperRef = ref.child("Planta1");
+        Map<String, Object> hopperUpdates = new HashMap<>();
+        hopperUpdates.put("iniciar", false);
+        hopperRef.updateChildrenAsync(hopperUpdates);
+    }
     
         
 }

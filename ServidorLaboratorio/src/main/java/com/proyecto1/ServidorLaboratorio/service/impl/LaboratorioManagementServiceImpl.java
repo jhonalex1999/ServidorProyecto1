@@ -52,10 +52,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Autowired
     private FirebaseInitializer firebase;
 
-        
     @Autowired
-    private RealTime firebase2;    
-    
+    private RealTime firebase2;
+
     @Override
     public Integer agregarParticipantes(ArrayList<String> participantes, int idFranja) {
         ApiFuture<WriteResult> writeResultApiFuture = null;
@@ -327,7 +326,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         docData.put("idLaboratorio", idLaboratorio);
         docData.put("problema", problema);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMAS").document().create(docData);
-      
+
         System.out.println(firebase2.consultas("Planta1"));
         try {
             if (null != writeResultApiFuture.get()) {
@@ -339,8 +338,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    
-    
     @Override
     public Boolean finalizarPractica(int codGrupal) {
         List<String> response = new ArrayList<>();
@@ -642,10 +639,14 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean GuardarCaidaLibre() {
+    public Boolean iniciarProceso() {
+        firebase2.iniciar();
+        return true;
+    }
 
-   
-           return true;
+    @Override
+    public Boolean GuardarCaidaLibre() {
+        return true;
     }
 
     @Override

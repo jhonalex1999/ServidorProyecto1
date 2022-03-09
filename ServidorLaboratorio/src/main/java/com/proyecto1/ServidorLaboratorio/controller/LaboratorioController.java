@@ -132,4 +132,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.listar_Velocidad_MP(codigo_planta), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/iniciarProceso")
+    public ResponseEntity iniciarProceso() {
+        return new ResponseEntity(service.iniciarProceso(), HttpStatus.OK);
+    }
+
 }

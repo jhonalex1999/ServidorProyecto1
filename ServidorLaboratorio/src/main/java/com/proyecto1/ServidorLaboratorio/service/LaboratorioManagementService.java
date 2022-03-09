@@ -35,7 +35,6 @@ public interface LaboratorioManagementService {
     
     Integer agregarParticipantes(ArrayList<String> participantes,int idFranja);
 
-
     Boolean buscarHorario(int idAgendamiento, int codGrupal);
 
     Boolean insertarProblema(String idLaboratorio, String problema);
@@ -61,6 +60,8 @@ public interface LaboratorioManagementService {
     ArrayList<String> listar_Angulo_MP(int codigo_planta);
     
     ArrayList<String> listar_Velocidad_MP(int codigo_planta);
+    
+    Boolean iniciarProceso();
     
     Boolean GuardarCaidaLibre();//2
     Boolean GuardarLeyHooke();//1
