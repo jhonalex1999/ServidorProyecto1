@@ -136,5 +136,8 @@ public class LaboratorioController {
     public ResponseEntity iniciarProceso() {
         return new ResponseEntity(service.iniciarProceso(), HttpStatus.OK);
     }
-
+  @PostMapping(value = "/GuardarCaidaLibre")
+    public ResponseEntity GuardarCaidaLibre() {
+        return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
+    }
 }

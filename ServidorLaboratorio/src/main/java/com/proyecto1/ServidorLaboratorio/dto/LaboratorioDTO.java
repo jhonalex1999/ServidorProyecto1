@@ -12,12 +12,15 @@ import lombok.Data;
  *
  * @author julio
  */
-
 @Data
-public class CaidaLibreDTO {
-    private String id;
-    private Integer codigo_planta;
-    private Integer numLanzamientos;
-    private ArrayList<String> rangos_altura;
+public class LaboratorioDTO {
+
+    private Integer check;
+    private Boolean datos;
+    private ArrayList<Integer> elongaciones;
+    private Boolean finalizado;
+    private Boolean iniciar;
+    private Integer nRep;
     private Integer peso;
+    private ArrayList<Integer> pesos;
 }

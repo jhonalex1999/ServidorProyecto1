@@ -14,6 +14,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.LaboratorioDTO;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,36 +27,35 @@ import org.springframework.stereotype.Service;
  *
  * @author admin
  */
-
 @Service
 public class RealTime {
-      
-       DataSnapshot Consultas;
-        Object Coleccion;
-        DatabaseReference ref;
 
-        @PostConstruct
-        private  void conectarReal() throws IOException {
-            
-        
-    // Fetch the service account key JSON file contents
+    DataSnapshot Consultas;
+    Object Coleccion;
+    String peso2;
+    DatabaseReference ref;
+
+    @PostConstruct
+    private void conectarReal() throws IOException {
+
+        // Fetch the service account key JSON file contents
         FileInputStream serviceAccount = new FileInputStream("src/main/resources/RealTime.json");
 
-    // Initialize the app with a service account, granting admin privileges
+        // Initialize the app with a service account, granting admin privileges
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 // The database URL depends on the location of the database
                 .setDatabaseUrl("https://plantas-db84a-default-rtdb.firebaseio.com")
                 .build();
-        FirebaseApp prueba = FirebaseApp.initializeApp(options,"secondary");
+        FirebaseApp prueba = FirebaseApp.initializeApp(options, "secondary");
 
-    // As an admin, the app has access to read and write all data, regardless of Security Rules
+        // As an admin, the app has access to read and write all data, regardless of Security Rules
         ref = FirebaseDatabase.getInstance(prueba).getReference();
-              
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               Consultas=dataSnapshot;
+                Consultas = dataSnapshot;
             }
 
             @Override
@@ -62,17 +63,21 @@ public class RealTime {
             }
         });
     }
-    public Object consultas(String consulta){
-         Object document = Consultas.child(consulta);
+
+    public Object consultas(String padre,String hijo) {
+         Object document = Consultas.child(padre).child(hijo);
          return document;
     }
-  
-    public void iniciar(){
-        DatabaseReference hopperRef = ref.child("Planta1");
+    
+    public void iniciar() {
+        LaboratorioDTO ob = new LaboratorioDTO();
+        //ob.setCheck(Integer.parseInt(Consultas.child("Planta1").child("peso").getValue().toString()));
+        //ob.setElongaciones(Consultas.child("Planta1").child("peso").getValue().toString());
+        //System.out.println("Prueba: " + Consultas.child("Planta3").child("elongaciones").getValue().toString());
+        DatabaseReference hopperRef = ref.child("Planta3");
         Map<String, Object> hopperUpdates = new HashMap<>();
         hopperUpdates.put("iniciar", false);
         hopperRef.updateChildrenAsync(hopperUpdates);
     }
-    
-        
+
 }

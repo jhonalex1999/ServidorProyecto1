@@ -327,7 +327,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         docData.put("problema", problema);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMAS").document().create(docData);
 
-        System.out.println(firebase2.consultas("Planta1"));
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -646,6 +645,23 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean GuardarCaidaLibre() {
+        ArrayList<String> elongaciones = new ArrayList<>();
+        String prueba = firebase2.consultas("Planta1", "peso").toString();
+        System.out.println(prueba);
+        //firebase2.setElongaciones(Consultas.child("Planta1").child("peso").getValue().toString());
+        String prueba2 = firebase2.consultas("Planta1", "elongaciones").toString();
+        for (int i = 3; i < 7; i++) {
+            String valor2 = prueba2.split("=")[i];
+            String valorReal2 = valor2.split(",")[0];
+            elongaciones.add(valorReal2);
+               
+        }
+        String ultimo_valor=elongaciones.get(3).replace("}", "");
+        elongaciones.set(3, ultimo_valor);
+        
+        System.out.println(elongaciones);
+
+        //System.out.println(valorReal);
         return true;
     }
 
