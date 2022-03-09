@@ -28,6 +28,8 @@ public class PracticaController {
     @Autowired
     private PracticaManagementService service;
     
+    
+    
     @GetMapping(value = "/greet/{name}")
     public String greet(@PathVariable(value = "name") String name){
         return "Hola" + name;
@@ -56,7 +58,6 @@ public class PracticaController {
     public ResponseEntity delete(@PathVariable(value = "id") String id){
         return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
-    
-    
+  
     
 }

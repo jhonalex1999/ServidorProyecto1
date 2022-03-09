@@ -26,6 +26,7 @@ import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
+import com.proyecto1.ServidorLaboratorio.firebase.RealTime;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +52,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Autowired
     private FirebaseInitializer firebase;
 
+        
+    @Autowired
+    private RealTime firebase2;    
+    
     @Override
     public Integer agregarParticipantes(ArrayList<String> participantes, int idFranja) {
         ApiFuture<WriteResult> writeResultApiFuture = null;
@@ -321,7 +327,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         docData.put("idLaboratorio", idLaboratorio);
         docData.put("problema", problema);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMAS").document().create(docData);
-
+      
+        System.out.println(firebase2.consultas("Planta1"));
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -332,6 +339,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
+    
+    
     @Override
     public Boolean finalizarPractica(int codGrupal) {
         List<String> response = new ArrayList<>();
@@ -630,6 +639,23 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return null;
         }
         return null;
+    }
+
+    @Override
+    public Boolean GuardarCaidaLibre() {
+
+   
+           return true;
+    }
+
+    @Override
+    public Boolean GuardarLeyHooke() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Boolean GuardarMovimientoParaolico() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -61,5 +61,9 @@ public interface LaboratorioManagementService {
     ArrayList<String> listar_Angulo_MP(int codigo_planta);
     
     ArrayList<String> listar_Velocidad_MP(int codigo_planta);
+    
+    Boolean GuardarCaidaLibre();//2
+    Boolean GuardarLeyHooke();//1
+    Boolean GuardarMovimientoParaolico();//3
    
 }

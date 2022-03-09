@@ -22,6 +22,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
+import com.proyecto1.ServidorLaboratorio.firebase.RealTime;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.logging.Level;
@@ -33,6 +35,8 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
 
     @Autowired
     private FirebaseInitializer firebase;
+
+    
 
     @Override
     public List<PracticaDTO> listarPracticas() {
