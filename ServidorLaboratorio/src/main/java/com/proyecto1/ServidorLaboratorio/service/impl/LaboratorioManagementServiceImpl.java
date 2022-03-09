@@ -478,22 +478,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    @Override
-    public Boolean reportarError(int cod_planta, String descripcion) {
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("codigo_planta", cod_planta);
-        docData.put("problema", descripcion);
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PROBLEMA").document().create(docData);
-        try {
-            if (null != writeResultApiFuture.get()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (Exception e) {
-            return Boolean.FALSE;
-        }
-    }
-
     private CollectionReference getCollection(String Colecion) {
         return firebase.getFirestore().collection(Colecion);
     }
