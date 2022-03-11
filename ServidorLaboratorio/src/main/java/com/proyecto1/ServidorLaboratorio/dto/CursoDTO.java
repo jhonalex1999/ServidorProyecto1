@@ -15,7 +15,7 @@ import lombok.Data;
 public class CursoDTO {
 
     private String nombreCurso;
-    private Integer codigoMatricula;
+    private String codigoMatricula;
     private String fechaCreacion;
     private String fechaEliminacion;
     private Integer tamanoGrupo;

@@ -95,10 +95,10 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
     }
 
     @Override
-    public Boolean agregarCurso(String correo_institucional, int codigo) {
+    public Boolean agregarCurso(String correo_institucional, String codigo_curso) {
         String Agendamiento = "vacio";
         //Primero buscara el curso
-        String nombre_curso = buscarCodigoCurso(codigo);
+        String nombre_curso = buscarCodigoCurso(codigo_curso);
         int id_usuario = buscarIdUsuario(correo_institucional);
         //Si lo encontro matriculara y devolvera un TRUE, de lo contrario mandara un FALSE
         if (id_usuario > 0) {
@@ -114,7 +114,6 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
                     Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 ApiFuture<WriteResult> writeResultApiFuture = getCollection("USUARIO").document(Agendamiento).update("idUsuario", id_usuario, "Cursos", FieldValue.arrayUnion(nombre_curso));
-
                 try {
                     if (null != writeResultApiFuture.get()) {
                         return Boolean.TRUE;
@@ -188,15 +187,15 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
                 return id_usuario;
             }
             return 0;
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             return -1;
         }
     }
 
-    public String buscarCodigoCurso(int idCurso) {
+    public String buscarCodigoCurso(String codigo_curso) {
         CursoDTO curso;
         String nombre_curso = "";
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("CURSO").whereEqualTo("codigoMatricula", idCurso).get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("CURSO").whereEqualTo("codigoMatricula", codigo_curso).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {

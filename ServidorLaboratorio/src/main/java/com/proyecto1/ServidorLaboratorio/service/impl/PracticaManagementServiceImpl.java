@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.*; 
+import java.time.*;
 import java.time.format.*;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -36,8 +36,6 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     @Autowired
     private FirebaseInitializer firebase;
 
-    
-
     @Override
     public List<PracticaDTO> listarPracticas() {
         List<PracticaDTO> response = new ArrayList<>();
@@ -54,6 +52,22 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             return response;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Override
+    public String descripcionProfesorPractica(int codigo_planta) {
+        PracticaDTO practica;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PRACTICA").whereEqualTo("codigoPlanta", codigo_planta).get();
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                practica = doc.toObject(PracticaDTO.class);
+                return practica.getDescripcion();
+            }
+            return "";
+
+        } catch (Exception e) {
+            return "";
         }
     }
 
@@ -114,60 +128,59 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
 
     @Override
     public Boolean verificarAgendamiento(int codGrupal, int codigoPlanta) {
-        AgendamientoDTO Agendamiento = new  AgendamientoDTO();
-         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).whereEqualTo("codigoPlanta", codigoPlanta).get();
+        AgendamientoDTO Agendamiento = new AgendamientoDTO();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).whereEqualTo("codigoPlanta", codigoPlanta).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 Agendamiento = doc.toObject(AgendamientoDTO.class);
             }
-                
-                LocalDateTime hoy = LocalDateTime.now(); 
-                int dia=hoy.getDayOfMonth();
-                int mes =hoy.getMonthValue();
-                int anio =hoy.getYear();
-                int minuto=hoy.getMinute();
-                int hora=hoy.getHour();
-                
-                String fecha=Agendamiento.getFecha();
-                
-                int AnioBd=Integer.parseInt(fecha.split("-")[0]);
-                int MesBd=Integer.parseInt(fecha.split("-")[1]);
-                int DiaBd=Integer.parseInt(fecha.split("-")[2]);
-                
-                String horaInicio=Agendamiento.getHoraInicio();
-                String horaFinal=Agendamiento.getHoraFin();
-                
-                int horaInBd=Integer.parseInt(horaInicio.split(":")[0]);
-                int MinutosInBd=Integer.parseInt(horaInicio.split(":")[1]);  
-                int horaFinBd=Integer.parseInt(horaFinal.split(":")[0]);
-                int MinutosFinBd=Integer.parseInt(horaFinal.split(":")[1]);  
-                
-            if(dia == DiaBd && mes == MesBd && anio == AnioBd){
-              if(hora == horaInBd  ){
-                 if(minuto >= MinutosInBd ){
-                   return true;
-                }else{
-                   return false;
+
+            LocalDateTime hoy = LocalDateTime.now();
+            int dia = hoy.getDayOfMonth();
+            int mes = hoy.getMonthValue();
+            int anio = hoy.getYear();
+            int minuto = hoy.getMinute();
+            int hora = hoy.getHour();
+
+            String fecha = Agendamiento.getFecha();
+
+            int AnioBd = Integer.parseInt(fecha.split("-")[0]);
+            int MesBd = Integer.parseInt(fecha.split("-")[1]);
+            int DiaBd = Integer.parseInt(fecha.split("-")[2]);
+
+            String horaInicio = Agendamiento.getHoraInicio();
+            String horaFinal = Agendamiento.getHoraFin();
+
+            int horaInBd = Integer.parseInt(horaInicio.split(":")[0]);
+            int MinutosInBd = Integer.parseInt(horaInicio.split(":")[1]);
+            int horaFinBd = Integer.parseInt(horaFinal.split(":")[0]);
+            int MinutosFinBd = Integer.parseInt(horaFinal.split(":")[1]);
+
+            if (dia == DiaBd && mes == MesBd && anio == AnioBd) {
+                if (hora == horaInBd) {
+                    if (minuto >= MinutosInBd) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else if (hora == horaFinBd) {
+                    if (minuto < MinutosFinBd) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else if (hora > horaInBd && hora < horaFinBd) {
+                    return true;
                 }
-              } else if (hora == horaFinBd){
-                  if(minuto < MinutosFinBd){
-                      return true;
-                  }else{
-                      return false;
-                  }
-              }else if (hora > horaInBd && hora < horaFinBd){
-                  return true;
-              }
             } else {
                 return false;
             }
-                
-        } catch (Exception e) {
-             return false;
-        }
-        return false;     
-    }
 
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
 
 }

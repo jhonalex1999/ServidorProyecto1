@@ -17,5 +17,6 @@ public interface PracticaManagementService {
     Boolean add(PostDTO post);
     Boolean edit(String id, PostDTO post);
     Boolean delete(String id);
+    String descripcionProfesorPractica(int codigo_planta);
 
 }

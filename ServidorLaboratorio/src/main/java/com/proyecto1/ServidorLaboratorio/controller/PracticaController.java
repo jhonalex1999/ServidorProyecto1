@@ -24,40 +24,43 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/practica")
 public class PracticaController {
-    
+
     @Autowired
     private PracticaManagementService service;
-    
-    
-    
+
     @GetMapping(value = "/greet/{name}")
-    public String greet(@PathVariable(value = "name") String name){
+    public String greet(@PathVariable(value = "name") String name) {
         return "Hola" + name;
     }
-    
+
     @GetMapping(value = "/listarPracticas")
-    public ResponseEntity listarPracticas(){
+    public ResponseEntity listarPracticas() {
         return new ResponseEntity(service.listarPracticas(), HttpStatus.OK);
     }
+
     @GetMapping(value = "/{codGrupal}/{codigoPlanta}/verificarAgendamiento")
-    public ResponseEntity verificarAgendamiento(@PathVariable(value = "codGrupal") int codGrupal,@PathVariable(value = "codigoPlanta") int codigoPlanta){
-        return new ResponseEntity(service.verificarAgendamiento(codGrupal,codigoPlanta), HttpStatus.OK);
+    public ResponseEntity verificarAgendamiento(@PathVariable(value = "codGrupal") int codGrupal, @PathVariable(value = "codigoPlanta") int codigoPlanta) {
+        return new ResponseEntity(service.verificarAgendamiento(codGrupal, codigoPlanta), HttpStatus.OK);
     }
-    
+
     @PostMapping(value = "/add")
-    public ResponseEntity add(@RequestBody PostDTO post){
+    public ResponseEntity add(@RequestBody PostDTO post) {
         return new ResponseEntity(service.add(post), HttpStatus.OK);
     }
-    
+
     @PutMapping(value = "/{id}/update")
-    public ResponseEntity edit(@PathVariable(value = "id") String id, @RequestBody PostDTO post){
+    public ResponseEntity edit(@PathVariable(value = "id") String id, @RequestBody PostDTO post) {
         return new ResponseEntity(service.edit(id, post), HttpStatus.OK);
     }
-    
+
     @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity delete(@PathVariable(value = "id") String id){
+    public ResponseEntity delete(@PathVariable(value = "id") String id) {
         return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
-  
-    
+
+    @GetMapping(value = "/{codigo_planta}/descripcionProfesorPractica")
+    public ResponseEntity descripcionProfesorPractica(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.descripcionProfesorPractica(codigo_planta), HttpStatus.OK);
+    }
+
 }

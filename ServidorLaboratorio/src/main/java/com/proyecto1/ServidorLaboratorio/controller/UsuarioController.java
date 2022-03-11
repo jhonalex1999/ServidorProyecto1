@@ -40,9 +40,9 @@ public class UsuarioController {
         return new ResponseEntity(service.agregarUsuario(post), HttpStatus.OK);
     }*/
 
-    @PostMapping(value = "{correo}/{codCurso}/matricularCurso")
-    public ResponseEntity matricularCurso(@PathVariable(value = "codCurso") int codigoCurso, @PathVariable(value = "correo") String correo_institucional) {
-        return new ResponseEntity(service.agregarCurso(correo_institucional, codigoCurso), HttpStatus.OK);
+    @PostMapping(value = "{correo}/{codigo_curso}/matricularCurso")
+    public ResponseEntity matricularCurso(@PathVariable(value = "codigo_curso") String codigo_curso, @PathVariable(value = "correo") String correo_institucional) {
+        return new ResponseEntity(service.agregarCurso(correo_institucional, codigo_curso), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{correo}/buscarCursosMatriculados")

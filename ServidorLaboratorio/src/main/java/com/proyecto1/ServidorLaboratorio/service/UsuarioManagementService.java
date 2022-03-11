@@ -21,7 +21,7 @@ public interface UsuarioManagementService {
     
     public ArrayList<String> buscarCursosMatriculados (String correo);
     
-    public Boolean agregarCurso(String correo_institucional, int codigo_curso);
+    public Boolean agregarCurso(String correo_institucional, String codigo_curso);
     
     public Boolean ingresarUsuario(String correo_institucional, String nombre);
 }
