@@ -132,12 +132,24 @@ public class LaboratorioController {
         return new ResponseEntity(service.listar_Velocidad_MP(codigo_planta), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/iniciarProceso")
-    public ResponseEntity iniciarProceso() {
-        return new ResponseEntity(service.iniciarProceso(), HttpStatus.OK);
+    @GetMapping(value = "/{planta}/iniciarProceso")
+    public ResponseEntity iniciarProceso(@PathVariable(value = "planta") String planta) {
+        return new ResponseEntity(service.iniciarProceso(planta), HttpStatus.OK);
     }
   @PostMapping(value = "/GuardarCaidaLibre")
     public ResponseEntity GuardarCaidaLibre() {
         return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
+    }
+  @PostMapping(value = "/GuardarLeyHooke")
+    public ResponseEntity GuardarLeyHooke() {
+        return new ResponseEntity(service.GuardarLeyHooke(), HttpStatus.OK);
+    }
+  @PostMapping(value = "/GuardarMovimientoParabolico")
+    public ResponseEntity GuardarMovimientoParabolico() {
+        return new ResponseEntity(service.GuardarMovimientoParabolico(), HttpStatus.OK);
+    }
+   @GetMapping(value = "/{planta}/finalizarProceso")
+    public ResponseEntity finalizarProceso(@PathVariable(value = "planta") String planta) {
+        return new ResponseEntity(service.finalizarProceso(planta), HttpStatus.OK);
     }
 }

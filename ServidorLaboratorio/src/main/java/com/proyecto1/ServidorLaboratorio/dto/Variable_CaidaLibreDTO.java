@@ -8,14 +8,16 @@ package com.proyecto1.ServidorLaboratorio.dto;
 import java.util.ArrayList;
 import lombok.Data;
 
-
+/**
+ *
+ * @author julio
+ */
 
 @Data
-public class MovimientoParabolicoDTO {
-    private ArrayList<String> datosX;
-    private ArrayList<String> datosY;
-    private int nRep;
-    private ArrayList<String> tiempo;
-    private ArrayList<String> velocidad;
-    private String url;
+public class Variable_CaidaLibreDTO {
+    private String id;
+    private Integer codigo_planta;
+    private Integer numLanzamientos;
+    private ArrayList<String> rangos_altura;
+    private Integer peso;
 }

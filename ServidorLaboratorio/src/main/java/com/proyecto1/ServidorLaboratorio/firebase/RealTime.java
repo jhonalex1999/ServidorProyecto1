@@ -14,7 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Variable_CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LaboratorioDTO;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class RealTime {
 
         // As an admin, the app has access to read and write all data, regardless of Security Rules
         ref = FirebaseDatabase.getInstance(prueba).getReference();
-
+        
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -69,14 +69,17 @@ public class RealTime {
          return document;
     }
     
-    public void iniciar() {
-        LaboratorioDTO ob = new LaboratorioDTO();
-        //ob.setCheck(Integer.parseInt(Consultas.child("Planta1").child("peso").getValue().toString()));
-        //ob.setElongaciones(Consultas.child("Planta1").child("peso").getValue().toString());
-        //System.out.println("Prueba: " + Consultas.child("Planta3").child("elongaciones").getValue().toString());
-        DatabaseReference hopperRef = ref.child("Planta3");
+    public void iniciar(String planta) {
+        DatabaseReference hopperRef = ref.child(planta);
         Map<String, Object> hopperUpdates = new HashMap<>();
-        hopperUpdates.put("iniciar", false);
+        hopperUpdates.put("iniciar", true);
+        hopperRef.updateChildrenAsync(hopperUpdates);
+    }
+    
+    public void finalizarProceso(String planta){
+        DatabaseReference hopperRef = ref.child(planta);
+        Map<String, Object> hopperUpdates = new HashMap<>();
+        hopperUpdates.put("finalizado", true);
         hopperRef.updateChildrenAsync(hopperUpdates);
     }
 
