@@ -15,6 +15,7 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import static com.itextpdf.text.pdf.PdfName.DATA;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
@@ -38,15 +39,26 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -107,33 +119,36 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         return true;
     }
 
-    public static void download(String urlString, String filename, String savePath) throws Exception {
-        // Construir URL  
-        URL url = new URL(urlString);
-        // conexión abierta  
-        URLConnection con = url.openConnection();
-        // Establece el tiempo de espera de la solicitud en 5 s  
-        con.setConnectTimeout(5 * 1000);
-        // flujo de entrada  
-        InputStream is = con.getInputStream();
+    @Override
+    public Boolean probarCSV() {
+        try {
+            String ruta = System.getProperty("user.home");
+            String currentPath = Paths.get("").toAbsolutePath().normalize().toString();
+            String downloadFolder = ruta + "/Downloads/";
+            String downloadPath = ruta + "/Downloads/";
+            File newFolder = new File(downloadPath);
+            boolean dirCreated = newFolder.mkdir();
 
-        // Búfer de datos de 1K  
-        byte[] bs = new byte[1024];
-        // La longitud de los datos leídos  
-        int len;
-        // flujo de archivo de salida  
-        File sf = new File(savePath);
-        if (!sf.exists()) {
-            sf.mkdirs();
+            // get current time
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-M-dd_HH-mm-ss");
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
+            String fileName = "Reporte_" + dtf.format(now) + ".csv";
+
+            // Whatever the file path is.
+            File statText = new File(downloadPath + "/" + fileName);
+            FileOutputStream is = new FileOutputStream(statText);
+            OutputStreamWriter osw = new OutputStreamWriter(is);
+            Writer w = new BufferedWriter(osw);
+
+            for (int i = 0; i < 10; i++) {
+                w.write("isac ñáéíóúü, xxxx, yyyy, zzzz, aaaa, bbbb, ccccc, dddd, eeee, ffff, gggg, erick\n");
+            }
+            w.close();
+        } catch (IOException e) {
+            System.err.println("Problem writing to the file " + e);
         }
-        OutputStream os = new FileOutputStream(sf.getPath() + "/" + filename);
-        // empieza a leer  
-        while ((len = is.read(bs)) != -1) {
-            os.write(bs, 0, len);
-        }
-        // Finalizar, cerrar todos los enlaces  
-        os.close();
-        is.close();
+        return true;
     }
 
     @Override
@@ -296,6 +311,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
+    
+
     /*@Override
     public Boolean crearPdf() {
         List<Laboratorio_Caida_LibreDTO> response = new ArrayList<>();
@@ -333,9 +350,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
 
         for (int i = 0; i < response.size(); i++) {
-            //tabla.addCell(String.valueOf(response.get(i).getAltura()));
-            //tabla.addCell(String.valueOf(response.get(i).getTiempo()));
-            //tabla.addCell(String.valueOf(response.get(i).getNumLanzamientos()));
+            tabla.addCell(String.valueOf(response.get(i).getAltura()));
+            tabla.addCell(String.valueOf(response.get(i).getTiempo()));
+            tabla.addCell(String.valueOf(response.get(i).getNumLanzamientos()));
 
         }
         try {
@@ -356,7 +373,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                post = doc.toObject(AgendamientoDTO.class);
+                post = doc.toObject(AgendamientoDTO.class
+                );
                 post.setIdFranja(doc.getId());
                 response.add(post);
                 System.out.println(response);
@@ -377,9 +395,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return Agendamiento;
     }
@@ -393,9 +413,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 return false;
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return true;
 
@@ -458,7 +480,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class
+                );
                 participantes.setId(doc.getId());
                 nombres.add(participantes.getCorreo());
                 //System.out.println(cursos);
@@ -477,7 +500,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class
+                );
                 participantes.setId(doc.getId());
                 response.add(participantes.getId());
 
@@ -495,7 +519,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class
+                );
                 participantes.setId(doc.getId());
                 response.add(participantes.getId());
 
@@ -514,7 +539,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         int contados = 0;
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                grupo = doc.toObject(GrupoDTO.class);
+                grupo = doc.toObject(GrupoDTO.class
+                );
                 grupo.setId(doc.getId());
                 String id = grupo.getId();
                 if (grupo.getEstado() == 1) {
@@ -538,7 +564,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class
+                );
                 return participantes.getRol();
             }
             return "";
@@ -554,7 +581,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes = doc.toObject(ParticipantesDTO.class
+                );
                 return participantes.getCodGrupal();
             }
             return 0;
@@ -616,9 +644,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 return Participante;
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ExecutionException ex) {
-            Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LaboratorioManagementServiceImpl.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return Participante;
     }
@@ -630,7 +660,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_caida_libre = doc.toObject(CaidaLibreDTO.class);
+                laboratorio_caida_libre = doc.toObject(CaidaLibreDTO.class
+                );
                 laboratorio_caida_libre.setId(doc.getId());
                 rangos_altura = laboratorio_caida_libre.getRangos_altura();
                 return rangos_altura;
@@ -649,7 +680,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class);
+                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class
+                );
                 laboratorio_ley_hooke.setId(doc.getId());
                 rangos_elongacion = laboratorio_ley_hooke.getRangos_elongacion();
                 return rangos_elongacion;
@@ -668,7 +700,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class);
+                laboratorio_ley_hooke = doc.toObject(LeyHookeDTO.class
+                );
                 laboratorio_ley_hooke.setId(doc.getId());
                 rangos_fuerza = laboratorio_ley_hooke.getRangos_fuerza();
                 return rangos_fuerza;
@@ -687,7 +720,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
+                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class
+                );
                 laboratorio_movimiento_parabolico.setId(doc.getId());
                 rangos_angulo = laboratorio_movimiento_parabolico.getRango_angulo();
                 return rangos_angulo;
@@ -706,7 +740,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
+                laboratorio_movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class
+                );
                 laboratorio_movimiento_parabolico.setId(doc.getId());
                 rangos_velocidad = laboratorio_movimiento_parabolico.getRango_velocidad();
                 return rangos_velocidad;

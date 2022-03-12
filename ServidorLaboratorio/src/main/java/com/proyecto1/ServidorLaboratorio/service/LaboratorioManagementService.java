@@ -26,6 +26,8 @@ import java.util.List;
 public interface LaboratorioManagementService {
     
     Boolean descargar() throws MalformedURLException, IOException, Exception;
+    
+    Boolean probarCSV();
 
     List<AgendamientoDTO> listarAgendamiento(int codigoPlanta);
     
