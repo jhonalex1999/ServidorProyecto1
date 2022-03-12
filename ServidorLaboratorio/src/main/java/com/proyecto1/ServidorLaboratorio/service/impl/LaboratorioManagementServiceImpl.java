@@ -5,6 +5,7 @@
  */
 package com.proyecto1.ServidorLaboratorio.service.impl;
 
+import com.google.api.client.util.IOUtils;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -37,10 +38,22 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.web.servlet.ModelAndView;
+import static org.springframework.web.servlet.function.RequestPredicates.param;
 
 /**
  *
@@ -54,6 +67,74 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Autowired
     private RealTime firebase2;
+
+    @Override
+    public Boolean descargar() throws MalformedURLException, IOException, Exception {
+        try {
+            String ruta = System.getProperty("user.home");
+            // Url con la foto
+            URL url = new URL(
+                    "https://firebasestorage.googleapis.com/v0/b/post-proyecto1.appspot.com/o/prueba.jpeg?alt=media&token=8d7b3131-6094-4580-8a2b-fd8f4fae5d46");
+
+            // establecemos conexion
+            URLConnection urlCon = url.openConnection();
+
+            // Sacamos por pantalla el tipo de fichero
+            System.out.println(urlCon.getContentType());
+
+            // Se obtiene el inputStream de la foto web y se abre el fichero
+            // local.
+            InputStream is = urlCon.getInputStream();
+            FileOutputStream fos = new FileOutputStream(ruta + "/Downloads/1.jpg");
+
+            // Lectura de la foto de la web y escritura en fichero local
+            byte[] array = new byte[1000]; // buffer temporal de lectura.
+            int leido = is.read(array);
+            while (leido > 0) {
+                fos.write(array, 0, leido);
+                leido = is.read(array);
+            }
+
+            // cierre de conexion y fichero.
+            is.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*String ruta = System.getProperty("user.home");
+        download("https://firebasestorage.googleapis.com/v0/b/post-proyecto1.appspot.com/o/1.jpg?alt=media&token=cacf003c-1278-4ea0-adef-be5e50379e86", "1.jpg?alt=media&token=cacf003c-1278-4ea0-adef-be5e50379e86", ruta + "/Downloads/");
+        return true;*/
+        return true;
+    }
+
+    public static void download(String urlString, String filename, String savePath) throws Exception {
+        // Construir URL  
+        URL url = new URL(urlString);
+        // conexión abierta  
+        URLConnection con = url.openConnection();
+        // Establece el tiempo de espera de la solicitud en 5 s  
+        con.setConnectTimeout(5 * 1000);
+        // flujo de entrada  
+        InputStream is = con.getInputStream();
+
+        // Búfer de datos de 1K  
+        byte[] bs = new byte[1024];
+        // La longitud de los datos leídos  
+        int len;
+        // flujo de archivo de salida  
+        File sf = new File(savePath);
+        if (!sf.exists()) {
+            sf.mkdirs();
+        }
+        OutputStream os = new FileOutputStream(sf.getPath() + "/" + filename);
+        // empieza a leer  
+        while ((len = is.read(bs)) != -1) {
+            os.write(bs, 0, len);
+        }
+        // Finalizar, cerrar todos los enlaces  
+        os.close();
+        is.close();
+    }
 
     @Override
     public Integer agregarParticipantes(ArrayList<String> participantes, int idFranja) {
@@ -654,11 +735,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             String valor2 = prueba2.split("=")[i];
             String valorReal2 = valor2.split(",")[0];
             elongaciones.add(valorReal2);
-               
+
         }
-        String ultimo_valor=elongaciones.get(3).replace("}", "");
+        String ultimo_valor = elongaciones.get(3).replace("}", "");
         elongaciones.set(3, ultimo_valor);
-        
+
         System.out.println(elongaciones);
 
         //System.out.println(valorReal);

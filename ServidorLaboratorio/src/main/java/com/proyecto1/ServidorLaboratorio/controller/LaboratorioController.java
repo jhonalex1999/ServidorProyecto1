@@ -38,6 +38,11 @@ public class LaboratorioController {
     @Autowired
     private LaboratorioManagementService service;
 
+    @GetMapping(value = "/descargar")
+    public ResponseEntity descargar() throws Exception {
+        return new ResponseEntity(service.descargar(), HttpStatus.OK);
+    }
+
     /*@GetMapping(value = "/pdf")
     public ResponseEntity pdf() {
         return new ResponseEntity(service.crearPdf(), HttpStatus.OK);
@@ -136,7 +141,8 @@ public class LaboratorioController {
     public ResponseEntity iniciarProceso() {
         return new ResponseEntity(service.iniciarProceso(), HttpStatus.OK);
     }
-  @PostMapping(value = "/GuardarCaidaLibre")
+
+    @PostMapping(value = "/GuardarCaidaLibre")
     public ResponseEntity GuardarCaidaLibre() {
         return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
     }

@@ -13,7 +13,9 @@ import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ import java.util.List;
  * @author admin
  */
 public interface LaboratorioManagementService {
+    
+    Boolean descargar() throws MalformedURLException, IOException, Exception;
 
     List<AgendamientoDTO> listarAgendamiento(int codigoPlanta);
     
