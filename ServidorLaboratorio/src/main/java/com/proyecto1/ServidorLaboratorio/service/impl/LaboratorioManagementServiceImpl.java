@@ -888,7 +888,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         }  
     }
-    
+  
     @Override
     public Boolean finalizarProceso(String planta) {
         firebase2.finalizarProceso(planta);
