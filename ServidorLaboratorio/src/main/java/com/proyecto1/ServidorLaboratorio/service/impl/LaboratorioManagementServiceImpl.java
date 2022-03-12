@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import com.proyecto1.ServidorLaboratorio.service.LaboratorioManagementService;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -648,67 +649,24 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean GuardarCaidaLibre() {
-     ArrayList<String> errores = new ArrayList<>();
-     ArrayList<String> gravedadN= new ArrayList<>();
-     ArrayList<String> tiempo = new ArrayList<>();
-     CaidaLibreDTO objCaidaLibre= new   CaidaLibreDTO();
-        //numero de repeticiones
-        String nRepDB = firebase2.consultas("Planta2", "nRep").toString();
-        nRepDB = nRepDB.split("=")[2];
-        nRepDB= nRepDB.replace("}", "");
-        nRepDB= nRepDB.replace(" ", "");
-        objCaidaLibre.setNRep(Integer.parseInt(nRepDB));
-       
-        //array de errores
-        int longitud=objCaidaLibre.getNRep()+3;
-        
-        String erroresDB = firebase2.consultas("Planta2", "errores").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = erroresDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            errores.add(valor);
+        CaidaLibreDTO objCaidaLibre=firebase2.getCaidaLibre();
+        if(pasarCaidaLibre(objCaidaLibre)){
+        return true;
         }
-        String ultimo_valor_elongaciones=errores.get(objCaidaLibre.getNRep()-1).replace("}", "");
-        errores.set(objCaidaLibre.getNRep()-1, ultimo_valor_elongaciones);
-        objCaidaLibre.setErrores(errores);
-    
-           
-        // array de gravedadN
-       
-        String gravedadNDB = firebase2.consultas("Planta2", "gravedadN").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = gravedadNDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            gravedadN.add(valor);
-        }
-        String ultimo_valor_pesos=gravedadN.get(objCaidaLibre.getNRep()-1).replace("}", "");
-        gravedadN.set(objCaidaLibre.getNRep()-1, ultimo_valor_pesos);
-        objCaidaLibre.setGravedadN(gravedadN);
-        
-        // array tiempo 
-        
-        String tiempoDB = firebase2.consultas("Planta2", "tiempo").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = tiempoDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            tiempo.add(valor);
-        }
-        String ultimo_valor_tiempo=tiempo.get(objCaidaLibre.getNRep()-1).replace("}", "");
-        tiempo.set(objCaidaLibre.getNRep()-1, ultimo_valor_tiempo);
-        objCaidaLibre.setTiempo(tiempo);
-        
-       if(pasarCaidaLibre(objCaidaLibre)){
-       return true;
-       }
-        
         return false;
     }
        private boolean pasarCaidaLibre(CaidaLibreDTO objCaidaLibre){
        Map<String, Object> docData = new HashMap<>();
-        docData.put("errores", objCaidaLibre.getErrores());
-        docData.put("gravedadN", objCaidaLibre.getGravedadN());
+        Collection<Double> valores = objCaidaLibre.getErrores().values();
+        ArrayList<Double> errores= new ArrayList<>(valores);
+        valores = objCaidaLibre.getGravedadN().values();
+        ArrayList<Double> gravedadN= new ArrayList<>(valores);
+        valores = objCaidaLibre.getTiempo().values();
+        ArrayList<Double> tiempo= new ArrayList<>(valores);
+        docData.put("errores", errores);
+        docData.put("gravedadN", gravedadN);
         docData.put("nRep", objCaidaLibre.getNRep());
-        docData.put("tiempo", objCaidaLibre.getTiempo());
+        docData.put("tiempo", tiempo);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("LABORATORIO_CAIDA_LIBRE").document().create(docData);
 
         try {
@@ -723,56 +681,22 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     
     @Override
     public Boolean GuardarLeyHooke() {
-        ArrayList<String> elongaciones = new ArrayList<>();
-        ArrayList<String> pesos = new ArrayList<>();
-        LeyHookeDTO objHooke= new LeyHookeDTO();
-        //numero de repeticiones
-        String nRepDB = firebase2.consultas("Planta1", "nRep").toString();
-        nRepDB = nRepDB.split("=")[2];
-        nRepDB= nRepDB.replace("}", "");
-        nRepDB= nRepDB.replace(" ", "");
-        objHooke.setNRep(Integer.parseInt(nRepDB));
-       
-        //array de longitudes
-        int longitud=objHooke.getNRep()+3;
-        
-        String elongacionesDB = firebase2.consultas("Planta1", "elongaciones").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = elongacionesDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            elongaciones.add(valor);
-        }
-        String ultimo_valor_elongaciones=elongaciones.get(objHooke.getNRep()-1).replace("}", "");
-        elongaciones.set(objHooke.getNRep()-1, ultimo_valor_elongaciones);
-        objHooke.setElongaciones(elongaciones);
-    
-           
-        // array de pesos
-       
-        String pesosDB = firebase2.consultas("Planta1", "pesos").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = pesosDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            pesos.add(valor);
-        }
-        String ultimo_valor_pesos=pesos.get(objHooke.getNRep()-1).replace("}", "");
-        pesos.set(objHooke.getNRep()-1, ultimo_valor_pesos);
-        objHooke.setPesos(pesos);
-        
-        System.out.println(objHooke.getElongaciones());
-        System.out.println(objHooke.getPesos());
-        
-       if(pasarDatosLeyHooke(objHooke)){
-            return true;
-       }
-
-        return false;
+     
+    LeyHookeDTO objHooke= firebase2.getLeyHooke();
+    if(pasarDatosLeyHooke( objHooke)){
+    return true;
+    }
+    return false;
     }
     private boolean pasarDatosLeyHooke(LeyHookeDTO objHooke){
        Map<String, Object> docData = new HashMap<>();
-        docData.put("elongaciones", objHooke.getElongaciones());
+        Collection<Double> valores = objHooke.getElongaciones().values();
+        ArrayList<Double> elongaciones= new ArrayList<>(valores);
+        valores = objHooke.getPesos().values();
+        ArrayList<Double> pesos= new ArrayList<>(valores);
+        docData.put("elongaciones", elongaciones);
         docData.put("nRep", objHooke.getNRep());
-        docData.put("pesos", objHooke.getPesos());
+        docData.put("pesos", pesos);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("LABORATORIO_LEY_HOOKE").document().create(docData);
 
         try {
@@ -787,95 +711,20 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     
     @Override
     public Boolean GuardarMovimientoParabolico() {
-       ArrayList<String> datosX = new ArrayList<>();
-       ArrayList<String> datosY = new ArrayList<>();
-       ArrayList<String> tiempo = new ArrayList<>();
-       ArrayList<String> velocidad = new ArrayList<>();
-       MovimientoParabolicoDTO objMovParabolico= new MovimientoParabolicoDTO();
-        //numero de repeticiones
-        /*String nRepDB = firebase2.consultas("Planta3", "nRep").toString();
-        nRepDB = nRepDB.split("=")[2];
-        nRepDB= nRepDB.replace("}", "");
-        nRepDB= nRepDB.replace(" ", "");
-        objMovParabolico.setNRep(Integer.parseInt(nRepDB));
-       */
-        objMovParabolico.setNRep(41);
-        //array datosx
-        int longitud=objMovParabolico.getNRep()+3;
-        
-        String datosXDB = firebase2.consultas("Planta3", "datos_x").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux = datosXDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            datosX.add(valor);
+     MovimientoParabolicoDTO objMovimientoParabolico = firebase2.getMovimientoParabolico();
+        if(pasarDatosMovimientoParabolico(objMovimientoParabolico)){
+        return true;
         }
-        String ultimo_valor_datosX=datosX.get(objMovParabolico.getNRep()-1).replace("}", "");
-        datosX.set(objMovParabolico.getNRep()-1,ultimo_valor_datosX);
-        objMovParabolico.setDatosX(datosX);
-    
-           
-        //array datosy
-
-        String datosYDB = firebase2.consultas("Planta3", "datos_y").toString();
-        for (int i = 3; i < longitud; i++) {
-            String aux =  datosYDB.split("=")[i];
-            String valor = aux.split(",")[0];
-            datosY.add(valor);
-        }
-        String ultimo_valor_datosY=datosY.get(objMovParabolico.getNRep()-1).replace("}", "");
-        datosY.set(objMovParabolico.getNRep()-1, ultimo_valor_datosY);
-        objMovParabolico.setDatosY(datosY);
-    
-        
-        // array de tiempo
-       
-        String tiempoDB = firebase2.consultas("Planta3", "tiempo").toString();
-        for (int i = 2; i < 3; i++) {
-            String aux = tiempoDB.split("=")[i];
-            //String valor = aux.split(",")[0];
-            tiempo.add(aux);
-        }
-        String ultimo_valor_tiempo=tiempo.get(0).replace("}", "");
-        tiempo.set(0, ultimo_valor_tiempo);
-        objMovParabolico.setTiempo(tiempo);
-        
-        // array de velocidad
-       
-        String velocidadDB = firebase2.consultas("Planta3", "velocidad").toString();
-        for (int i = 2; i < 3; i++) {
-            String aux = velocidadDB.split("=")[i];
-            //String valor = aux.split(",")[0];
-            velocidad.add(aux);
-        }
-        String ultimo_valor_velocidad=velocidad.get(0).replace("}", "");
-        velocidad.set(0, ultimo_valor_velocidad);
-        objMovParabolico.setVelocidad(velocidad);
-        
-        
-        String urlDB = firebase2.consultas("Planta3", "url_imagen").toString();
-        urlDB = urlDB.split("=")[2];
-        urlDB= urlDB.replace("}", "");
-        objMovParabolico.setUrl(urlDB);
-        System.out.println( objMovParabolico.getUrl());
-        System.out.println( objMovParabolico.getDatosX());
-        System.out.println( objMovParabolico.getDatosY());
-        System.out.println( objMovParabolico.getTiempo());
-        System.out.println( objMovParabolico.getVelocidad());
-        
-        if(pasarDatosMovimientoParabolico(objMovParabolico)){
-         return true;
-        }
-        
         return false;
     }
     private boolean pasarDatosMovimientoParabolico(MovimientoParabolicoDTO objMovimientoParabolico){
        Map<String, Object> docData = new HashMap<>();
-        docData.put("datos_x", objMovimientoParabolico.getDatosX());
-        docData.put("datos_y", objMovimientoParabolico.getDatosY());
+        docData.put("datos_x", objMovimientoParabolico.getDatos_x());
+        docData.put("datos_y", objMovimientoParabolico.getDatos_y());
         docData.put("nRep", objMovimientoParabolico.getNRep());
         docData.put("tiempo", objMovimientoParabolico.getTiempo());
         docData.put("velocidad", objMovimientoParabolico.getVelocidad());
-        docData.put("url", objMovimientoParabolico.getUrl());
+        docData.put("url", objMovimientoParabolico.getUrl_imagen());
                
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("LABORATORIO_MOVIMIENTO_PARABOLICO").document().create(docData);
 

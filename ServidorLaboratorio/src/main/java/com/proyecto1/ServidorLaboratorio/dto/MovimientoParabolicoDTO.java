@@ -6,16 +6,17 @@
 package com.proyecto1.ServidorLaboratorio.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lombok.Data;
 
 
 
 @Data
 public class MovimientoParabolicoDTO {
-    private ArrayList<String> datosX;
-    private ArrayList<String> datosY;
+    private ArrayList<Double> datos_x;
+    private  ArrayList<Double>  datos_y;
     private int nRep;
-    private ArrayList<String> tiempo;
-    private ArrayList<String> velocidad;
-    private String url;
+    private String tiempo;
+    private String url_imagen;
+    private int velocidad;
 }

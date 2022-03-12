@@ -6,15 +6,15 @@
 package com.proyecto1.ServidorLaboratorio.dto;
 
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import lombok.Data;
 
 
 
 @Data
 public class CaidaLibreDTO {
-   private ArrayList<String> errores;
-   private ArrayList<String> gravedadN;
+   private HashMap<String,Double>errores;
+   private HashMap<String,Double> gravedadN;
    private int nRep;
-   private ArrayList<String> tiempo;
+   private HashMap<String,Double>  tiempo;
 }

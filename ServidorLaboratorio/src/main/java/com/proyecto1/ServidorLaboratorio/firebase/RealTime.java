@@ -14,8 +14,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LaboratorioDTO;
+import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
+import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,11 +33,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class RealTime {
 
-    DataSnapshot Consultas;
-    Object Coleccion;
-    String peso2;
-    DatabaseReference ref;
-
+ 
+    DatabaseReference ref1;
+    DatabaseReference ref2;
+    DatabaseReference ref3;
+    MovimientoParabolicoDTO MovimientoParabolico;
+    LeyHookeDTO LeyHooke;
+    CaidaLibreDTO CaidaLibre;
+    
     @PostConstruct
     private void conectarReal() throws IOException {
 
@@ -50,34 +56,82 @@ public class RealTime {
         FirebaseApp prueba = FirebaseApp.initializeApp(options, "secondary");
 
         // As an admin, the app has access to read and write all data, regardless of Security Rules
-        ref = FirebaseDatabase.getInstance(prueba).getReference();
+        ref1 = FirebaseDatabase.getInstance(prueba).getReference("Planta1");
+        ref2 = FirebaseDatabase.getInstance(prueba).getReference("Planta2");
+        ref3 = FirebaseDatabase.getInstance(prueba).getReference("Planta3");
         
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Consultas = dataSnapshot;
+             
+                LeyHooke = dataSnapshot.getValue(LeyHookeDTO.class);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
             }
         });
+       ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              
+                CaidaLibre = dataSnapshot.getValue(CaidaLibreDTO.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+      ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              
+                MovimientoParabolico = dataSnapshot.getValue(MovimientoParabolicoDTO.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        }); 
     }
 
-    public Object consultas(String padre,String hijo) {
-         Object document = Consultas.child(padre).child(hijo);
-         return document;
+    public LeyHookeDTO getLeyHooke(){
+ 
+     return  LeyHooke;
+    }
+     public CaidaLibreDTO getCaidaLibre(){
+     return  CaidaLibre;
+    }
+     public MovimientoParabolicoDTO getMovimientoParabolico(){
+    
+     return  MovimientoParabolico;
     }
     
+   
     public void iniciar(String planta) {
-        DatabaseReference hopperRef = ref.child(planta);
+        DatabaseReference hopperRef;
+        if(planta.equals("Planta1")){
+            hopperRef = ref1;
+        }else if(planta.equals("Planta2")){
+             hopperRef = ref2;
+        }else{
+             hopperRef = ref3;
+        }
+       
         Map<String, Object> hopperUpdates = new HashMap<>();
         hopperUpdates.put("iniciar", true);
         hopperRef.updateChildrenAsync(hopperUpdates);
     }
     
     public void finalizarProceso(String planta){
-        DatabaseReference hopperRef = ref.child(planta);
+        DatabaseReference hopperRef;
+        if(planta.equals("Planta1")){
+            hopperRef = ref1;
+        }else if(planta.equals("Planta2")){
+             hopperRef = ref2;
+        }else{
+             hopperRef = ref3;
+        }
         Map<String, Object> hopperUpdates = new HashMap<>();
         hopperUpdates.put("finalizado", true);
         hopperRef.updateChildrenAsync(hopperUpdates);

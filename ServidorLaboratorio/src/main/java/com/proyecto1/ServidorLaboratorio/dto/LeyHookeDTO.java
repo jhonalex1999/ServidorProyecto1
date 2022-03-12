@@ -6,13 +6,14 @@
 package com.proyecto1.ServidorLaboratorio.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lombok.Data;
 
 
 
 @Data
 public class LeyHookeDTO {
-    private ArrayList<String> elongaciones;
+    private HashMap<String,Double>  elongaciones;
     private int nRep;
-    private ArrayList<String> pesos;
+    private HashMap<String,Double>  pesos;
 }
