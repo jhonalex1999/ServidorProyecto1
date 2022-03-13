@@ -151,16 +151,9 @@ public class LaboratorioController {
     public ResponseEntity GuardarCaidaLibre() {
         return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
     }
-  @PostMapping(value = "/GuardarLeyHooke")
-    public ResponseEntity GuardarLeyHooke() {
-        return new ResponseEntity(service.GuardarLeyHooke(), HttpStatus.OK);
-    }
-  @PostMapping(value = "/GuardarMovimientoParabolico")
-    public ResponseEntity GuardarMovimientoParabolico() {
-        return new ResponseEntity(service.GuardarMovimientoParabolico(), HttpStatus.OK);
-    }
-   @GetMapping(value = "/{planta}/finalizarProceso")
-    public ResponseEntity finalizarProceso(@PathVariable(value = "planta") String planta) {
-        return new ResponseEntity(service.finalizarProceso(planta), HttpStatus.OK);
+
+    @GetMapping(value = "/{cod_planta}/retornarAltura")
+    public ResponseEntity retornarAltura(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarAltura(cod_planta), HttpStatus.OK);
     }
 }
