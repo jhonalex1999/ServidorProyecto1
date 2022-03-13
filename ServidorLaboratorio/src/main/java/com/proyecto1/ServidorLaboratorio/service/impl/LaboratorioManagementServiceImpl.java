@@ -21,6 +21,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
@@ -122,6 +123,13 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public Boolean probarCSV() {
         try {
+            ParticipantesDTO participantes;
+            Laboratorio_Caida_LibreDTO labCaidaLibre;
+            int codigo_grupo = 0;
+            ArrayList<String> nombres_estudiantes = new ArrayList<>();
+            ArrayList<Integer> valores_errores = new ArrayList<>();
+            ArrayList<Integer> valores_tiempo = new ArrayList<>();
+            String lider = "";
             String ruta = System.getProperty("user.home");
             String currentPath = Paths.get("").toAbsolutePath().normalize().toString();
             String downloadFolder = ruta + "/Downloads/";
@@ -141,8 +149,45 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             OutputStreamWriter osw = new OutputStreamWriter(is);
             Writer w = new BufferedWriter(osw);
 
-            for (int i = 0; i < 10; i++) {
-                w.write("isac ñáéíóúü, xxxx, yyyy, zzzz, aaaa, bbbb, ccccc, dddd, eeee, ffff, gggg, erick\n");
+            //Sacamos los datos del grupo
+            try {
+                //Datos necesarios
+                ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").get();
+                for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                    participantes = doc.toObject(ParticipantesDTO.class);
+                    nombres_estudiantes.add(participantes.getCorreo());
+                    codigo_grupo = participantes.getCodGrupal();
+                    if (participantes.getRol().equals("Lider")) {
+                        lider = participantes.getCorreo();
+                    }
+                }
+                ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").get();
+                for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
+                    labCaidaLibre = doc.toObject(Laboratorio_Caida_LibreDTO.class);
+                    for (int i = 0; i < labCaidaLibre.getErrores().size(); i++) {
+                        valores_errores.add(labCaidaLibre.getErrores().get(i));
+                    }
+                    for (int j = 0; j < labCaidaLibre.getTiempo().size(); j++) {
+                        valores_tiempo.add(labCaidaLibre.getTiempo().get(j));
+                    }
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(UsuarioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(LaboratorioManagementServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(codigo_grupo);
+            w.write("------------------------------------------------------ \n");
+            w.write("Codigo Grupo: " + codigo_grupo + "\n");
+            w.write("Correos estudiantes: " + nombres_estudiantes + "\n");
+            w.write("Lider y simulador del equipo: " + lider + "\n");
+            w.write("----------------------Valores X--------------------- \n");
+            for (int i = 0; i < valores_errores.size(); i++) {
+                w.write("Error: " + valores_errores.get(i) + "\n");
+            }
+            w.write("----------------------Valores Y--------------------- \n");
+            for (int j = 0; j < valores_tiempo.size(); j++) {
+                w.write("Tiempo: " + valores_tiempo.get(j) + "\n");
             }
             w.close();
         } catch (IOException e) {
@@ -224,8 +269,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     private int codGrupal() {
         ParticipantesDTO participantes;
         List<Integer> codActuales = new ArrayList<>();
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").get();
         try {
+            ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").get();
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 participantes = doc.toObject(ParticipantesDTO.class);
                 codActuales.add(participantes.getCodGrupal());
@@ -310,8 +355,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return null;
         }
     }
-
-    
 
     /*@Override
     public Boolean crearPdf() {
