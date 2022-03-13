@@ -27,7 +27,7 @@ public interface LaboratorioManagementService {
     
     Boolean descargar() throws MalformedURLException, IOException, Exception;
     
-    Boolean probarCSV();
+    Boolean descargarDatos(int codigo_planta);
 
     List<AgendamientoDTO> listarAgendamiento(int codigoPlanta);
     

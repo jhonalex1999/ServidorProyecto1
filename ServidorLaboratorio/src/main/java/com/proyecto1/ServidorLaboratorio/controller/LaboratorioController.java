@@ -43,9 +43,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.descargar(), HttpStatus.OK);
     }
     
-    @GetMapping(value = "/probarCSV")
-    public ResponseEntity probarCSV() throws Exception {
-        return new ResponseEntity(service.probarCSV(), HttpStatus.OK);
+    @GetMapping(value = "/{codigo_planta}/descargarDatos")
+    public ResponseEntity descargarDatos(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
+        return new ResponseEntity(service.descargarDatos(codigo_planta), HttpStatus.OK);
     }
 
     /*@GetMapping(value = "/pdf")

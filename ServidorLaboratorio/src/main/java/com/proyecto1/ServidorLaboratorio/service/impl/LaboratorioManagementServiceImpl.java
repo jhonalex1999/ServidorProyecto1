@@ -22,6 +22,8 @@ import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Ley_HookeDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Movimiento_ParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
@@ -121,27 +123,48 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean probarCSV() {
+    public Boolean descargarDatos(int codigo_planta) {
         try {
+            //Datos
             ParticipantesDTO participantes;
+            Laboratorio_Ley_HookeDTO labLeyHooke;
             Laboratorio_Caida_LibreDTO labCaidaLibre;
+            Laboratorio_Movimiento_ParabolicoDTO labMovimientoParabolico;
             int codigo_grupo = 0;
+            String lider = "";
+            String nombre_planta = "";
             ArrayList<String> nombres_estudiantes = new ArrayList<>();
+            //Array de cada planta
+            //Planta 1
+            ArrayList<Integer> valores_elongaciones = new ArrayList<>();
+            ArrayList<Integer> valores_pesos = new ArrayList<>();
+            //Planta 2
             ArrayList<Integer> valores_errores = new ArrayList<>();
             ArrayList<Integer> valores_tiempo = new ArrayList<>();
-            String lider = "";
+            //Planta 3
+            ArrayList<Integer> valores_x = new ArrayList<>();
+            ArrayList<Integer> valores_y = new ArrayList<>();
+            //Carpeta
             String ruta = System.getProperty("user.home");
             String currentPath = Paths.get("").toAbsolutePath().normalize().toString();
-            String downloadFolder = ruta + "/Downloads/";
+            //String downloadFolder = ruta + "/Downloads/";
             String downloadPath = ruta + "/Downloads/";
             File newFolder = new File(downloadPath);
             boolean dirCreated = newFolder.mkdir();
 
+            if (codigo_planta == 1) {
+                nombre_planta = "Ley de Hooke";
+            } else if (codigo_planta == 2) {
+                nombre_planta = "Caida Libre";
+            } else {
+                nombre_planta = "Movimiento Parabolico";
+            }
+            
             // get current time
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-M-dd_HH-mm-ss");
             LocalDateTime now = LocalDateTime.now();
             System.out.println(dtf.format(now));
-            String fileName = "Reporte_" + dtf.format(now) + ".csv";
+            String fileName = "Entrega de datos_Planta_" + codigo_planta + "_" + nombre_planta + "_" + dtf.format(now) + ".csv";
 
             // Whatever the file path is.
             File statText = new File(downloadPath + "/" + fileName);
@@ -161,14 +184,39 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                         lider = participantes.getCorreo();
                     }
                 }
-                ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").get();
-                for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
-                    labCaidaLibre = doc.toObject(Laboratorio_Caida_LibreDTO.class);
-                    for (int i = 0; i < labCaidaLibre.getErrores().size(); i++) {
-                        valores_errores.add(labCaidaLibre.getErrores().get(i));
+                //Datos de cada planta
+                if (codigo_planta == 1) {
+                    ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_LEY_HOOKE").get();
+                    for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
+                        labLeyHooke = doc.toObject(Laboratorio_Ley_HookeDTO.class);
+                        for (int i = 0; i < labLeyHooke.getElongaciones().size(); i++) {
+                            valores_elongaciones.add(labLeyHooke.getElongaciones().get(i));
+                        }
+                        for (int j = 0; j < labLeyHooke.getPesos().size(); j++) {
+                            valores_pesos.add(labLeyHooke.getPesos().get(j));
+                        }
                     }
-                    for (int j = 0; j < labCaidaLibre.getTiempo().size(); j++) {
-                        valores_tiempo.add(labCaidaLibre.getTiempo().get(j));
+                } else if (codigo_planta == 2) {
+                    ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").get();
+                    for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
+                        labCaidaLibre = doc.toObject(Laboratorio_Caida_LibreDTO.class);
+                        for (int i = 0; i < labCaidaLibre.getErrores().size(); i++) {
+                            valores_errores.add(labCaidaLibre.getErrores().get(i));
+                        }
+                        for (int j = 0; j < labCaidaLibre.getTiempos().size(); j++) {
+                            valores_tiempo.add(labCaidaLibre.getTiempos().get(j));
+                        }
+                    }
+                } else if (codigo_planta == 3) {
+                    ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_MOVIMIENTO_PARABOLICO").get();
+                    for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
+                        labMovimientoParabolico = doc.toObject(Laboratorio_Movimiento_ParabolicoDTO.class);
+                        for (int i = 0; i < labMovimientoParabolico.getX().size(); i++) {
+                            valores_x.add(labMovimientoParabolico.getX().get(i));
+                        }
+                        for (int j = 0; j < labMovimientoParabolico.getY().size(); j++) {
+                            valores_y.add(labMovimientoParabolico.getY().get(j));
+                        }
                     }
                 }
             } catch (InterruptedException ex) {
@@ -178,16 +226,38 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             }
             System.out.println(codigo_grupo);
             w.write("------------------------------------------------------ \n");
+            w.write("Codigo Planta: " + codigo_planta + "\n");
+            w.write("Nombre Planta: " + nombre_planta + "\n");
             w.write("Codigo Grupo: " + codigo_grupo + "\n");
             w.write("Correos estudiantes: " + nombres_estudiantes + "\n");
             w.write("Lider y simulador del equipo: " + lider + "\n");
-            w.write("----------------------Valores X--------------------- \n");
-            for (int i = 0; i < valores_errores.size(); i++) {
-                w.write("Error: " + valores_errores.get(i) + "\n");
-            }
-            w.write("----------------------Valores Y--------------------- \n");
-            for (int j = 0; j < valores_tiempo.size(); j++) {
-                w.write("Tiempo: " + valores_tiempo.get(j) + "\n");
+            if (codigo_planta == 1) {
+                w.write("----------------------Valores X--------------------- \n");
+                for (int i = 0; i < valores_elongaciones.size(); i++) {
+                    w.write("Elongacion: " + valores_elongaciones.get(i) + "\n");
+                }
+                w.write("----------------------Valores Y--------------------- \n");
+                for (int j = 0; j < valores_pesos.size(); j++) {
+                    w.write("Peso: " + valores_pesos.get(j) + "\n");
+                }
+            } else if (codigo_planta == 2) {
+                w.write("----------------------Valores X--------------------- \n");
+                for (int i = 0; i < valores_errores.size(); i++) {
+                    w.write("Error: " + valores_errores.get(i) + "\n");
+                }
+                w.write("----------------------Valores Y--------------------- \n");
+                for (int j = 0; j < valores_tiempo.size(); j++) {
+                    w.write("Tiempo: " + valores_tiempo.get(j) + "\n");
+                }
+            } else if (codigo_planta == 3) {
+                w.write("----------------------Valores X--------------------- \n");
+                for (int i = 0; i < valores_x.size(); i++) {
+                    w.write("X: " + valores_x.get(i) + "\n");
+                }
+                w.write("----------------------Valores Y--------------------- \n");
+                for (int j = 0; j < valores_y.size(); j++) {
+                    w.write("Y: " + valores_y.get(j) + "\n");
+                }
             }
             w.close();
         } catch (IOException e) {

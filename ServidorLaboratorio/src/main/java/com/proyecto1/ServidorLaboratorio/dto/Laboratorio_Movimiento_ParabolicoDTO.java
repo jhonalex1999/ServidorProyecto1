@@ -13,9 +13,10 @@ import lombok.Data;
  * @author julio
  */
 @Data
-public class Laboratorio_Caida_LibreDTO {
+public class Laboratorio_Movimiento_ParabolicoDTO {
+
     private String id;
     private Integer codigo_planta;
-    private ArrayList<Integer> errores;
-    private ArrayList<Integer> tiempos;
+    private ArrayList<Integer> x;
+    private ArrayList<Integer> y;
 }
