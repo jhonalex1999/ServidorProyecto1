@@ -25,7 +25,7 @@ import java.util.List;
  */
 public interface LaboratorioManagementService {
     
-    Boolean descargar() throws MalformedURLException, IOException, Exception;
+    Boolean descargarArchivoProfesor(int codigo_planta) throws MalformedURLException, IOException, Exception;
     
     Boolean descargarDatos(int codigo_planta);
 

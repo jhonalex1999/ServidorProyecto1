@@ -38,9 +38,9 @@ public class LaboratorioController {
     @Autowired
     private LaboratorioManagementService service;
 
-    @GetMapping(value = "/descargar")
-    public ResponseEntity descargar() throws Exception {
-        return new ResponseEntity(service.descargar(), HttpStatus.OK);
+    @GetMapping(value = "/{codigo_planta}/descargarArchivoProfesor")
+    public ResponseEntity descargarArchivoProfesor(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
+        return new ResponseEntity(service.descargarArchivoProfesor(codigo_planta), HttpStatus.OK);
     }
     
     @GetMapping(value = "/{codigo_planta}/descargarDatos")

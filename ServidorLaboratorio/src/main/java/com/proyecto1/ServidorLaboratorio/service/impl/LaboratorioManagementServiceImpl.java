@@ -84,10 +84,11 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     private RealTime firebase2;
 
     @Override
-    public Boolean descargar() throws MalformedURLException, IOException, Exception {
+    public Boolean descargarArchivoProfesor(int codigo_planta) throws MalformedURLException, IOException, Exception {
         try {
             String ruta = System.getProperty("user.home");
-            // Url con la foto
+            
+            // Url con la informacion
             URL url = new URL(
                     "https://firebasestorage.googleapis.com/v0/b/post-proyecto1.appspot.com/o/prueba.jpeg?alt=media&token=8d7b3131-6094-4580-8a2b-fd8f4fae5d46");
 
