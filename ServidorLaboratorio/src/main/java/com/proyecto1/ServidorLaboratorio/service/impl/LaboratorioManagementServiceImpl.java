@@ -23,6 +23,9 @@ import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LaboratorioCaidaLibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Ley_HookeDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Movimiento_ParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_LeyHookeDTO;
@@ -940,6 +943,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return false;
     }
+    
     private boolean pasarDatosMovimientoParabolico(MovimientoParabolicoDTO objMovimientoParabolico){
        Map<String, Object> docData = new HashMap<>();
         docData.put("datos_x", objMovimientoParabolico.getDatos_x());

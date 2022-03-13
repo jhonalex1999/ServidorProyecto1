@@ -73,7 +73,7 @@ public interface LaboratorioManagementService {
     
     Boolean GuardarCaidaLibre();//2
     Boolean GuardarLeyHooke();//1
-    Boolean GuardarMovimientoParaolico();//3
+    Boolean GuardarMovimientoParabolico();//3
     
     ArrayList<Integer> retornarAltura(int id_planta);
    
