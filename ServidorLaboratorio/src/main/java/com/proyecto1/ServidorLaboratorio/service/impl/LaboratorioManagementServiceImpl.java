@@ -19,6 +19,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
+import com.proyecto1.ServidorLaboratorio.dto.LaboratorioCaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
@@ -636,7 +637,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return null;
     }
-
+    
     @Override
     public Boolean iniciarProceso() {
         firebase2.iniciar();
@@ -675,4 +676,25 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public ArrayList<Integer> retornarAltura(int id_planta){
+        ArrayList<Integer> datos_altura;
+        LaboratorioCaidaLibreDTO grupo;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("id_planta", id_planta).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                grupo = doc.toObject(LaboratorioCaidaLibreDTO.class);
+                grupo.setId(doc.getId());
+                datos_altura = grupo.getValores();
+                //System.out.println(cursos);
+                return datos_altura;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+    
 }

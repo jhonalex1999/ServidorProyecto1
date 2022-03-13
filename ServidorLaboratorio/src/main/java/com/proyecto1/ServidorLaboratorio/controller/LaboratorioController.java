@@ -136,8 +136,14 @@ public class LaboratorioController {
     public ResponseEntity iniciarProceso() {
         return new ResponseEntity(service.iniciarProceso(), HttpStatus.OK);
     }
-  @PostMapping(value = "/GuardarCaidaLibre")
+
+    @PostMapping(value = "/GuardarCaidaLibre")
     public ResponseEntity GuardarCaidaLibre() {
         return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarAltura")
+    public ResponseEntity retornarAltura(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarAltura(cod_planta), HttpStatus.OK);
     }
 }
