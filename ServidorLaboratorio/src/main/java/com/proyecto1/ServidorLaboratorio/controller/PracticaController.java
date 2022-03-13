@@ -59,5 +59,9 @@ public class PracticaController {
         return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
   
+    @GetMapping(value = "/{codGrupal}/{codigoPlanta}/duracion")
+    public ResponseEntity duracion(@PathVariable(value = "codGrupal") int codGrupal,@PathVariable(value = "codigoPlanta") int codigoPlanta){
+        return new ResponseEntity(service.duracion(codGrupal,codigoPlanta), HttpStatus.OK);
+    }
     
 }
