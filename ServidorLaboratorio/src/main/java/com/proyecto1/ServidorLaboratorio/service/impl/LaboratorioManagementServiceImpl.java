@@ -778,8 +778,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_caida_libre = doc.toObject(CaidaLibreDTO.class
-                );
                 laboratorio_caida_libre = doc.toObject(Variable_CaidaLibreDTO.class);
                 laboratorio_caida_libre.setId(doc.getId());
                 rangos_altura = laboratorio_caida_libre.getRangos_altura();
