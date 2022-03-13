@@ -5,11 +5,11 @@
  */
 package com.proyecto1.ServidorLaboratorio.service;
 
-import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Variable_CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
-import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Variable_LeyHookeDTO;
+import com.proyecto1.ServidorLaboratorio.dto.Variable_MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
@@ -31,11 +31,11 @@ public interface LaboratorioManagementService {
 
     List<AgendamientoDTO> listarAgendamiento(int codigoPlanta);
     
-    List<LeyHookeDTO> listarDatosHardwareLeyDeHooke();
+    List<Variable_LeyHookeDTO> listarDatosHardwareLeyDeHooke();
     
-    List<MovimientoParabolicoDTO> listarDatosHardwareMovimientoParabolico();
+    List<Variable_MovimientoParabolicoDTO> listarDatosHardwareMovimientoParabolico();
     
-    List<CaidaLibreDTO> listarDatosHardwareCaidaLibre();
+    List<Variable_CaidaLibreDTO> listarDatosHardwareCaidaLibre();
 
     //Boolean crearPdf();
     
@@ -67,10 +67,12 @@ public interface LaboratorioManagementService {
     
     ArrayList<String> listar_Velocidad_MP(int codigo_planta);
     
-    Boolean iniciarProceso();
+    Boolean iniciarProceso(String planta);
+       
+    Boolean finalizarProceso(String planta);
     
     Boolean GuardarCaidaLibre();//2
     Boolean GuardarLeyHooke();//1
-    Boolean GuardarMovimientoParaolico();//3
+    Boolean GuardarMovimientoParabolico();//3
    
 }

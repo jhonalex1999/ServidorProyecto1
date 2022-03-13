@@ -6,17 +6,14 @@
 package com.proyecto1.ServidorLaboratorio.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import lombok.Data;
 
-/**
- *
- * @author julio
- */
+
 
 @Data
 public class LeyHookeDTO {
-    private String id;
-    private Integer codigo_planta;
-    private ArrayList<String> rangos_elongacion;
-    private ArrayList<String> rangos_fuerza;
+    private HashMap<String,Double>  elongaciones;
+    private int nRep;
+    private HashMap<String,Double>  pesos;
 }

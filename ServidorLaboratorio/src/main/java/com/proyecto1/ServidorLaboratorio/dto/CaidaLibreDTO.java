@@ -5,19 +5,16 @@
  */
 package com.proyecto1.ServidorLaboratorio.dto;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import lombok.Data;
 
-/**
- *
- * @author julio
- */
+
 
 @Data
 public class CaidaLibreDTO {
-    private String id;
-    private Integer codigo_planta;
-    private Integer numLanzamientos;
-    private ArrayList<String> rangos_altura;
-    private Integer peso;
+   private HashMap<String,Double>errores;
+   private HashMap<String,Double> gravedadN;
+   private int nRep;
+   private HashMap<String,Double>  tiempo;
 }
