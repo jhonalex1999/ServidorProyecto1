@@ -116,6 +116,11 @@ public class LaboratorioController {
         return new ResponseEntity(service.iniciarProceso(planta), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{planta}/finalizarProceso")
+    public ResponseEntity finalizarProceso(@PathVariable(value = "planta") String planta) {
+        return new ResponseEntity(service.finalizarProceso(planta), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{cod_planta}/retornarAltura")
     public ResponseEntity retornarAltura(@PathVariable(value = "cod_planta") int cod_planta) {
         return new ResponseEntity(service.retornarAltura(cod_planta), HttpStatus.OK);
