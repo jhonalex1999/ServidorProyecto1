@@ -108,15 +108,31 @@ public class RealTime {
         return MovimientoParabolico;
     }
 
-    public Boolean iniciar(String planta) {
+    public Boolean iniciarLeyHooke(int peso) {
         DatabaseReference hopperRef;
-        if (planta.equals("1")) {
-            hopperRef = ref1;
-        } else if (planta.equals("2")) {
-            hopperRef = ref2;
-        } else {
-            hopperRef = ref3;
-        }
+        hopperRef = ref1;
+        hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
+                if (dataSnapshot.child("iniciar").getValue().toString().equals("false")) {
+                    Map<String, Object> hopperUpdates = new HashMap<>();
+                    hopperUpdates.put("peso", peso);
+                    hopperUpdates.put("iniciar", true);
+                    hopperRef.updateChildrenAsync(hopperUpdates);
+                    prueba(1);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+        return bandera2;
+    }
+    public Boolean iniciarCaidaLibre() {
+        DatabaseReference hopperRef;
+        hopperRef = ref2;
         hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,6 +151,28 @@ public class RealTime {
         });
         return bandera2;
     }
+    public Boolean iniciarMovimientoParabolico() {
+        DatabaseReference hopperRef;
+        hopperRef = ref3;
+        hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
+                if (dataSnapshot.child("iniciar").getValue().toString().equals("false")) {
+                    Map<String, Object> hopperUpdates = new HashMap<>();
+                    hopperUpdates.put("iniciar", true);
+                    hopperRef.updateChildrenAsync(hopperUpdates);
+                    prueba(1);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+        return bandera2;
+    }
+    
 
     public void prueba(int num) {
         if (num == 1) {

@@ -572,13 +572,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         return null;
     }
 
-    @Override
-    public Boolean iniciarProceso(String planta) {
-        Boolean bandera = firebase2.iniciar(planta);
-        return bandera;
-    }
-
-
     public Boolean GuardarCaidaLibre() {
         CaidaLibreDTO objCaidaLibre = firebase2.getCaidaLibre();
         if (pasarCaidaLibre(objCaidaLibre)) {
@@ -800,5 +793,36 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return null;
         }
         return null;
+    }
+
+    @Override
+    public Boolean iniciarLeyHooke(int peso) {
+        int pesobd=0;
+        if(peso==50){
+             pesobd=1;
+        }else if(peso==100){
+             pesobd=2;
+        }else if(peso==150){
+             pesobd=3;
+        }else if(peso==200){
+             pesobd=4;
+        }else if(peso==250){
+             pesobd=5;
+        }
+        
+        Boolean bandera = firebase2.iniciarLeyHooke(pesobd);
+        return bandera;  
+    }
+
+    @Override
+    public Boolean iniciarCaidaLibre() {
+        Boolean bandera = firebase2.iniciarCaidaLibre();
+        return bandera; 
+    }
+
+    @Override
+    public Boolean iniciarMovimientoParabolico() {
+        Boolean bandera = firebase2.iniciarMovimientoParabolico();
+        return bandera; 
     }
 }

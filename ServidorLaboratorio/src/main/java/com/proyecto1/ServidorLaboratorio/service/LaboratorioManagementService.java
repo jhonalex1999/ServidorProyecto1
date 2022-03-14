@@ -47,7 +47,9 @@ public interface LaboratorioManagementService {
 
     ArrayList<String> listar_Velocidad_MP(int codigo_planta);
 
-    Boolean iniciarProceso(String planta);
+    Boolean iniciarLeyHooke(int peso);
+    Boolean iniciarCaidaLibre();
+    Boolean iniciarMovimientoParabolico();
 
     Boolean finalizarProceso(String planta);
 
