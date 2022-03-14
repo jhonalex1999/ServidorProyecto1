@@ -358,5 +358,79 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
         }
         return false;
     }
+@Override
+    public int duracion(int codGrupal, int codigoPlanta) {
+        AgendamientoDTO Agendamiento = new AgendamientoDTO();
+        int resultado = 0;
+        int resultadoMin = 0;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("AGENDAMIENTO").whereEqualTo("codGrupal", codGrupal).whereEqualTo("codigoPlanta", codigoPlanta).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                Agendamiento = doc.toObject(AgendamientoDTO.class);
+            }
+
+            LocalDateTime hoy = LocalDateTime.now();
+            int dia = hoy.getDayOfMonth();
+            int mes = hoy.getMonthValue();
+            int anio = hoy.getYear();
+            int minuto = hoy.getMinute();
+            int hora = hoy.getHour();
+
+            String fecha = Agendamiento.getFecha();
+
+            int AnioBd = Integer.parseInt(fecha.split("-")[0]);
+            int MesBd = Integer.parseInt(fecha.split("-")[1]);
+            int DiaBd = Integer.parseInt(fecha.split("-")[2]);
+
+            String horaInicio = Agendamiento.getHoraInicio();
+            String horaFinal = Agendamiento.getHoraFin();
+
+            int horaInBd = Integer.parseInt(horaInicio.split(":")[0]);
+            int MinutosInBd = Integer.parseInt(horaInicio.split(":")[1]);
+            int horaFinBd = Integer.parseInt(horaFinal.split(":")[0]);
+            int MinutosFinBd = Integer.parseInt(horaFinal.split(":")[1]);
+
+            int horaInBdC = horaInBd * 60 * 60;
+            int MinutosInBdC = MinutosInBd * 60;
+            int horaFinBdC = horaFinBd * 60 * 60;
+            int MinutosFinBdC = MinutosFinBd * 60;
+            int minutoC = minuto * 60;
+            int horaC = hora * 60 * 60;
+
+            if (dia == DiaBd && mes == MesBd && anio == AnioBd) {
+                if (hora == horaInBd) {
+                    if (minuto >= MinutosInBd) {
+
+                        if (horaInBd == horaFinBd) {
+                            resultado = (MinutosFinBdC - minutoC);
+                        } else {
+                            resultado = (horaFinBdC + MinutosFinBdC) - (horaInBdC + minutoC) ;
+                        }
+                        return resultado;
+                    } else {
+                        return -1;
+                    }
+                } else if (hora == horaFinBd) {
+                    if (minuto < MinutosFinBd) {
+                        resultado = (MinutosFinBdC - minutoC);
+                        return resultado;
+                    } else {
+                        return -1;
+                    }
+                } else if (hora > horaInBd && hora < horaFinBd) {
+                    resultado = (horaFinBdC + MinutosFinBdC) - (horaC + minutoC);
+                    return resultado;
+                }
+            } else {
+                return -1;
+            }
+
+        } catch (Exception e) {
+            return -1;
+        }
+        return -1;
+    }
+
 
 }

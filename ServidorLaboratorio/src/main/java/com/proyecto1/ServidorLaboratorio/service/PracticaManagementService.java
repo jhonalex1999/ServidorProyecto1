@@ -27,5 +27,7 @@ public interface PracticaManagementService {
     Boolean verificarAgendamiento(int codGrupal, int codigoPlanta);
 
     String descripcionProfesorPractica(int codigo_planta);
+    
+    int duracion(int codGrupal,int codigoPlanta);
 
 }

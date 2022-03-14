@@ -67,5 +67,10 @@ public class PracticaController {
     public ResponseEntity descripcionProfesorPractica(@PathVariable(value = "codigo_planta") int codigo_planta) {
         return new ResponseEntity(service.descripcionProfesorPractica(codigo_planta), HttpStatus.OK);
     }
+    
+    @GetMapping(value = "/{codGrupal}/{codigoPlanta}/duracion")
+    public ResponseEntity duracion(@PathVariable(value = "codGrupal") int codGrupal,@PathVariable(value = "codigoPlanta") int codigoPlanta){
+        return new ResponseEntity(service.duracion(codGrupal,codigoPlanta), HttpStatus.OK);
+    }
 
 }
