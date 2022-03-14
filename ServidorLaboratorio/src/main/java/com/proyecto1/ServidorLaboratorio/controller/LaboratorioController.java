@@ -37,7 +37,7 @@ public class LaboratorioController {
 
     @Autowired
     private LaboratorioManagementService service;
-    
+
     @GetMapping(value = "/{codigo_planta}/descargarDatos")
     public ResponseEntity descargarDatos(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
         return new ResponseEntity(service.descargarDatos(codigo_planta), HttpStatus.OK);
@@ -125,5 +125,10 @@ public class LaboratorioController {
     @GetMapping(value = "/{cod_planta}/retornarAltura")
     public ResponseEntity retornarAltura(@PathVariable(value = "cod_planta") int cod_planta) {
         return new ResponseEntity(service.retornarAltura(cod_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarTiempo")
+    public ResponseEntity retornarTiempo(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarTiempo(cod_planta), HttpStatus.OK);
     }
 }

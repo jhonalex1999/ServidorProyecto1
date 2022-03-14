@@ -22,8 +22,6 @@ import com.proyecto1.ServidorLaboratorio.dto.Variable_CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.CaidaLibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.LaboratorioCaidaLibreDTO;
-import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Caida_LibreDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Ley_HookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Laboratorio_Movimiento_ParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.LeyHookeDTO;
@@ -69,6 +67,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.io.InputStreamResource;
@@ -88,14 +87,13 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Autowired
     private RealTime firebase2;
 
-
     @Override
     public Boolean descargarDatos(int codigo_planta) {
         try {
             //Datos
             ParticipantesDTO participantes;
             Laboratorio_Ley_HookeDTO labLeyHooke;
-            Laboratorio_Caida_LibreDTO labCaidaLibre;
+            CaidaLibreDTO labCaidaLibre;
             Laboratorio_Movimiento_ParabolicoDTO labMovimientoParabolico;
             int codigo_grupo = 0;
             String lider = "";
@@ -126,7 +124,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             } else {
                 nombre_planta = "Movimiento Parabolico";
             }
-            
+
             // get current time
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-M-dd_HH-mm-ss");
             LocalDateTime now = LocalDateTime.now();
@@ -166,12 +164,12 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                 } else if (codigo_planta == 2) {
                     ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").get();
                     for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
-                        labCaidaLibre = doc.toObject(Laboratorio_Caida_LibreDTO.class);
+                        labCaidaLibre = doc.toObject(CaidaLibreDTO.class);
                         for (int i = 0; i < labCaidaLibre.getErrores().size(); i++) {
-                            valores_errores.add(labCaidaLibre.getErrores().get(i));
+                            valores_errores.add((int) ((double) labCaidaLibre.getErrores().get(i)));
                         }
-                        for (int j = 0; j < labCaidaLibre.getTiempos().size(); j++) {
-                            valores_tiempo.add(labCaidaLibre.getTiempos().get(j));
+                        for (int j = 0; j < labCaidaLibre.getTiempo().size(); j++) {
+                            valores_tiempo.add((int) ((double) labCaidaLibre.getTiempo().get(j)));
                         }
                     }
                 } else if (codigo_planta == 3) {
@@ -557,7 +555,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return null;
     }
-    
+
     @Override
     public Boolean iniciarProceso(String planta) {
         firebase2.iniciar(planta);
@@ -566,24 +564,28 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean GuardarCaidaLibre() {
-        CaidaLibreDTO objCaidaLibre=firebase2.getCaidaLibre();
-        if(pasarCaidaLibre(objCaidaLibre)){
-        return true;
+        CaidaLibreDTO objCaidaLibre = firebase2.getCaidaLibre();
+        if (pasarCaidaLibre(objCaidaLibre)) {
+            return true;
         }
         return false;
     }
-       private boolean pasarCaidaLibre(CaidaLibreDTO objCaidaLibre){
-       Map<String, Object> docData = new HashMap<>();
-        Collection<Double> valores = objCaidaLibre.getErrores().values();
-        ArrayList<Double> errores= new ArrayList<>(valores);
-        valores = objCaidaLibre.getGravedadN().values();
-        ArrayList<Double> gravedadN= new ArrayList<>(valores);
-        valores = objCaidaLibre.getTiempo().values();
-        ArrayList<Double> tiempo= new ArrayList<>(valores);
-        docData.put("errores", errores);
-        docData.put("gravedadN", gravedadN);
+
+    private boolean pasarCaidaLibre(CaidaLibreDTO objCaidaLibre) {
+        Map<String, Object> docData = new HashMap<>();
+        Map<String, Double> altura = new HashMap<>();
+        objCaidaLibre.setCodigo_planta(2);
+        altura.put("h1", 10.0);
+        altura.put("h2", 20.0);
+        altura.put("h3", 30.0);
+        altura.put("h4", 40.0);
+        altura.put("h5", 50.0);
+        docData.put("codigo_planta", objCaidaLibre.getCodigo_planta());
+        docData.put("errores", objCaidaLibre.getErrores());
+        docData.put("gravedadN", objCaidaLibre.getGravedadN());
         docData.put("nRep", objCaidaLibre.getNRep());
-        docData.put("tiempo", tiempo);
+        docData.put("tiempo", objCaidaLibre.getTiempo());
+        docData.put("altura", altura);
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("LABORATORIO_CAIDA_LIBRE").document().create(docData);
 
         try {
@@ -593,24 +595,25 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        }  
+        }
     }
-    
+
     @Override
     public Boolean GuardarLeyHooke() {
-     
-    LeyHookeDTO objHooke= firebase2.getLeyHooke();
-    if(pasarDatosLeyHooke( objHooke)){
-    return true;
+
+        LeyHookeDTO objHooke = firebase2.getLeyHooke();
+        if (pasarDatosLeyHooke(objHooke)) {
+            return true;
+        }
+        return false;
     }
-    return false;
-    }
-    private boolean pasarDatosLeyHooke(LeyHookeDTO objHooke){
-       Map<String, Object> docData = new HashMap<>();
+
+    private boolean pasarDatosLeyHooke(LeyHookeDTO objHooke) {
+        Map<String, Object> docData = new HashMap<>();
         Collection<Double> valores = objHooke.getElongaciones().values();
-        ArrayList<Double> elongaciones= new ArrayList<>(valores);
+        ArrayList<Double> elongaciones = new ArrayList<>(valores);
         valores = objHooke.getPesos().values();
-        ArrayList<Double> pesos= new ArrayList<>(valores);
+        ArrayList<Double> pesos = new ArrayList<>(valores);
         docData.put("elongaciones", elongaciones);
         docData.put("nRep", objHooke.getNRep());
         docData.put("pesos", pesos);
@@ -623,27 +626,27 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        }  
+        }
     }
-    
+
     @Override
     public Boolean GuardarMovimientoParabolico() {
-     MovimientoParabolicoDTO objMovimientoParabolico = firebase2.getMovimientoParabolico();
-        if(pasarDatosMovimientoParabolico(objMovimientoParabolico)){
-        return true;
+        MovimientoParabolicoDTO objMovimientoParabolico = firebase2.getMovimientoParabolico();
+        if (pasarDatosMovimientoParabolico(objMovimientoParabolico)) {
+            return true;
         }
         return false;
     }
-    
-    private boolean pasarDatosMovimientoParabolico(MovimientoParabolicoDTO objMovimientoParabolico){
-       Map<String, Object> docData = new HashMap<>();
+
+    private boolean pasarDatosMovimientoParabolico(MovimientoParabolicoDTO objMovimientoParabolico) {
+        Map<String, Object> docData = new HashMap<>();
         docData.put("datos_x", objMovimientoParabolico.getDatos_x());
         docData.put("datos_y", objMovimientoParabolico.getDatos_y());
         docData.put("nRep", objMovimientoParabolico.getNRep());
         docData.put("tiempo", objMovimientoParabolico.getTiempo());
         docData.put("velocidad", objMovimientoParabolico.getVelocidad());
         docData.put("url", objMovimientoParabolico.getUrl_imagen());
-               
+
         ApiFuture<WriteResult> writeResultApiFuture = getCollection("LABORATORIO_MOVIMIENTO_PARABOLICO").document().create(docData);
 
         try {
@@ -653,9 +656,9 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             return Boolean.FALSE;
         } catch (Exception e) {
             return Boolean.FALSE;
-        }  
+        }
     }
-  
+
     @Override
     public Boolean finalizarProceso(String planta) {
         firebase2.finalizarProceso(planta);
@@ -663,18 +666,18 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<Integer> retornarAltura(int id_planta){
-        ArrayList<Integer> datos_altura;
-        LaboratorioCaidaLibreDTO grupo;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("id_planta", id_planta).get();
-
+    public ArrayList<Double> retornarTiempo(int codigo_planta) {
+        CaidaLibreDTO caida_libre;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                grupo = doc.toObject(LaboratorioCaidaLibreDTO.class);
-                grupo.setId(doc.getId());
-                datos_altura = grupo.getValores();
+                caida_libre = doc.toObject(CaidaLibreDTO.class);
+                caida_libre.setId(doc.getId());
+                Collection<Double> valores = caida_libre.getTiempo().values();
+                ArrayList<Double> tiempo = new ArrayList<>(valores);
+                //datos_tiempo =;
                 //System.out.println(cursos);
-                return datos_altura;
+                return tiempo;
             }
             //return cursos;
         } catch (Exception e) {
@@ -682,5 +685,25 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
         return null;
     }
-    
+
+    @Override
+    public ArrayList<Double> retornarAltura(int codigo_planta) {
+        CaidaLibreDTO caida_libre;
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
+
+        try {
+            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                caida_libre = doc.toObject(CaidaLibreDTO.class);
+                caida_libre.setId(doc.getId());
+                Collection<Double> valores = caida_libre.getAltura().values();
+                ArrayList<Double> altura = new ArrayList<>(valores);
+                return altura;
+            }
+            //return cursos;
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
 }
