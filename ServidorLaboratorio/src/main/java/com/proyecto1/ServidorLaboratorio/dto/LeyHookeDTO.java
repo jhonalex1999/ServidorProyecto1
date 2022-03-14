@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import lombok.Data;
 
-
-
 @Data
 public class LeyHookeDTO {
-    private HashMap<String,Double>  elongaciones;
+
+    private String id;
+    private Integer codigo_planta;
+    private HashMap<String, Double> elongaciones;
     private int nRep;
-    private HashMap<String,Double>  pesos;
+    private HashMap<String, Double> pesos;
 }

@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import lombok.Data;
 
-
-
 @Data
 public class MovimientoParabolicoDTO {
+
+    private String id;
+    private Integer codigo_planta;
     private ArrayList<Double> datos_x;
-    private  ArrayList<Double>  datos_y;
+    private ArrayList<Double> datos_y;
     private int nRep;
     private String tiempo;
     private String url_imagen;

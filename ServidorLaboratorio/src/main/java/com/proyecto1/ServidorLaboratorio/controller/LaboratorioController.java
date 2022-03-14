@@ -122,6 +122,16 @@ public class LaboratorioController {
         return new ResponseEntity(service.GuardarCaidaLibre(), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/GuardarLeyHooke")
+    public ResponseEntity GuardarLeyHooke() {
+        return new ResponseEntity(service.GuardarLeyHooke(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/GuardarMovimientoParabolico")
+    public ResponseEntity GuardarMovimientoParabolico() {
+        return new ResponseEntity(service.GuardarMovimientoParabolico(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{cod_planta}/retornarAltura")
     public ResponseEntity retornarAltura(@PathVariable(value = "cod_planta") int cod_planta) {
         return new ResponseEntity(service.retornarAltura(cod_planta), HttpStatus.OK);
@@ -130,5 +140,25 @@ public class LaboratorioController {
     @GetMapping(value = "/{cod_planta}/retornarTiempo")
     public ResponseEntity retornarTiempo(@PathVariable(value = "cod_planta") int cod_planta) {
         return new ResponseEntity(service.retornarTiempo(cod_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarElongaciones")
+    public ResponseEntity retornarElongaciones(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarElongaciones(cod_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarPesos")
+    public ResponseEntity retornarPesos(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarPesos(cod_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarX")
+    public ResponseEntity retornarX(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarX(cod_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{cod_planta}/retornarY")
+    public ResponseEntity retornarY(@PathVariable(value = "cod_planta") int cod_planta) {
+        return new ResponseEntity(service.retornarY(cod_planta), HttpStatus.OK);
     }
 }

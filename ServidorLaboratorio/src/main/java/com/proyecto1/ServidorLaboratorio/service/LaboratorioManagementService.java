@@ -62,4 +62,12 @@ public interface LaboratorioManagementService {
 
     ArrayList<Double> retornarAltura(int codigo_planta);
 
+    ArrayList<Double> retornarElongaciones(int codigo_planta);
+
+    ArrayList<Double> retornarPesos(int codigo_planta);
+
+    ArrayList<Double> retornarX(int codigo_planta);
+
+    ArrayList<Double> retornarY(int codigo_planta);
+
 }
