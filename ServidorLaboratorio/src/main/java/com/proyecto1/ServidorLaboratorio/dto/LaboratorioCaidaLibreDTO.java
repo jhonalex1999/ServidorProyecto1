@@ -16,5 +16,5 @@ import lombok.Data;
 public class LaboratorioCaidaLibreDTO {
     String id;
     Integer id_planta;
-    ArrayList<Integer> valores;
+    ArrayList<Integer> tiempo;
 }

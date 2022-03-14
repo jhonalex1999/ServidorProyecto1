@@ -677,16 +677,16 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<Integer> retornarAltura(int id_planta){
+    public ArrayList<Integer> retornarAltura(int codigo_planta){
         ArrayList<Integer> datos_altura;
         LaboratorioCaidaLibreDTO grupo;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("id_planta", id_planta).get();
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
 
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 grupo = doc.toObject(LaboratorioCaidaLibreDTO.class);
                 grupo.setId(doc.getId());
-                datos_altura = grupo.getValores();
+                datos_altura = grupo.getTiempo();
                 //System.out.println(cursos);
                 return datos_altura;
             }
