@@ -145,10 +145,10 @@ public class RealTime {
     public void finalizarProceso(String planta) {
         DatabaseReference hopperRef;
         Map<String, Object> hopperUpdates = new HashMap<>();
-        if (planta.equals("Planta1")) {
+        if (planta.equals("1")) {
             hopperUpdates.put("datos", false);
             hopperRef = ref1;
-        } else if (planta.equals("Planta2")) {
+        } else if (planta.equals("2")) {
             hopperRef = ref2;
         } else {
             hopperUpdates.put("subir_datos", "OFF");
