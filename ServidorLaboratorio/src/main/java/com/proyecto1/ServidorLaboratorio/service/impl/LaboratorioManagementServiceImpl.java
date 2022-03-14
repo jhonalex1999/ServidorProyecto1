@@ -658,6 +658,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
        private boolean pasarCaidaLibre(CaidaLibreDTO objCaidaLibre){
        Map<String, Object> docData = new HashMap<>();
         Collection<Double> valores = objCaidaLibre.getErrores().values();
+     
         ArrayList<Double> errores= new ArrayList<>(valores);
         valores = objCaidaLibre.getGravedadN().values();
         ArrayList<Double> gravedadN= new ArrayList<>(valores);

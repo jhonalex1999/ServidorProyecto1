@@ -37,9 +37,9 @@ public class RealTime {
     DatabaseReference ref1;
     DatabaseReference ref2;
     DatabaseReference ref3;
-    MovimientoParabolicoDTO MovimientoParabolico;
-    LeyHookeDTO LeyHooke;
-    CaidaLibreDTO CaidaLibre;
+    MovimientoParabolicoDTO MovimientoParabolico=new  MovimientoParabolicoDTO() ;
+    LeyHookeDTO LeyHooke = new  LeyHookeDTO();
+    CaidaLibreDTO CaidaLibre = new CaidaLibreDTO();
     
     @PostConstruct
     private void conectarReal() throws IOException {
