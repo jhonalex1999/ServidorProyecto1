@@ -33,14 +33,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class RealTime {
 
- 
     DatabaseReference ref1;
     DatabaseReference ref2;
     DatabaseReference ref3;
     MovimientoParabolicoDTO MovimientoParabolico;
     LeyHookeDTO LeyHooke;
     CaidaLibreDTO CaidaLibre;
-    
+    DataSnapshot movParabolico;
+
     @PostConstruct
     private void conectarReal() throws IOException {
 
@@ -59,11 +59,10 @@ public class RealTime {
         ref1 = FirebaseDatabase.getInstance(prueba).getReference("Planta1");
         ref2 = FirebaseDatabase.getInstance(prueba).getReference("Planta2");
         ref3 = FirebaseDatabase.getInstance(prueba).getReference("Planta3");
-        
+
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-             
                 LeyHooke = dataSnapshot.getValue(LeyHookeDTO.class);
             }
 
@@ -71,10 +70,9 @@ public class RealTime {
             public void onCancelled(DatabaseError error) {
             }
         });
-       ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              
                 CaidaLibre = dataSnapshot.getValue(CaidaLibreDTO.class);
             }
 
@@ -82,55 +80,73 @@ public class RealTime {
             public void onCancelled(DatabaseError error) {
             }
         });
-      ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              
+                movParabolico = dataSnapshot;
                 MovimientoParabolico = dataSnapshot.getValue(MovimientoParabolicoDTO.class);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
             }
-        }); 
+        });
     }
 
-    public LeyHookeDTO getLeyHooke(){
- 
-     return  LeyHooke;
+    public LeyHookeDTO getLeyHooke() {
+
+        return LeyHooke;
     }
-     public CaidaLibreDTO getCaidaLibre(){
-     return  CaidaLibre;
+
+    public CaidaLibreDTO getCaidaLibre() {
+        return CaidaLibre;
     }
-     public MovimientoParabolicoDTO getMovimientoParabolico(){
-    
-     return  MovimientoParabolico;
+
+    public MovimientoParabolicoDTO getMovimientoParabolico() {
+
+        return MovimientoParabolico;
     }
-    
-   
-    public void iniciar(String planta) {
+
+    public Boolean iniciar(String planta) {
+        Object iniciar;
+        int bandera = 0;
         DatabaseReference hopperRef;
-        if(planta.equals("Planta1")){
+        if (planta.equals("1")) {
             hopperRef = ref1;
-        }else if(planta.equals("Planta2")){
-             hopperRef = ref2;
-        }else{
-             hopperRef = ref3;
+        } else if (planta.equals("2")) {
+            hopperRef = ref2;
+        } else {
+            hopperRef = ref3;
         }
-       
-        Map<String, Object> hopperUpdates = new HashMap<>();
-        hopperUpdates.put("iniciar", true);
-        hopperRef.updateChildrenAsync(hopperUpdates);
+        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
+                if (dataSnapshot.child("iniciar").getValue().toString().equals("false")) {
+                    Map<String, Object> hopperUpdates = new HashMap<>();
+                    hopperUpdates.put("iniciar", true);
+                    hopperRef.updateChildrenAsync(hopperUpdates);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+        if (bandera == 1) {
+            return true;
+        }
+        return false;
     }
-    
-    public void finalizarProceso(String planta){
+
+    public void finalizarProceso(String planta) {
         DatabaseReference hopperRef;
-        if(planta.equals("Planta1")){
+        if (planta.equals("Planta1")) {
             hopperRef = ref1;
-        }else if(planta.equals("Planta2")){
-             hopperRef = ref2;
-        }else{
-             hopperRef = ref3;
+        } else if (planta.equals("Planta2")) {
+            hopperRef = ref2;
+        } else {
+            hopperRef = ref3;
         }
         Map<String, Object> hopperUpdates = new HashMap<>();
         hopperUpdates.put("finalizado", true);

@@ -563,8 +563,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean iniciarProceso(String planta) {
-        firebase2.iniciar(planta);
-        return true;
+        Boolean bandera = firebase2.iniciar(planta);
+        return bandera;
     }
 
     @Override
