@@ -47,7 +47,9 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             PracticaDTO practica;
 
             ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("PRACTICA").whereEqualTo("codigoPlanta", codigo_planta).get();
-
+            if(querySnapshotApiFuture == null){
+                return false;
+            }
             try {
                 for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                     practica = doc.toObject(PracticaDTO.class);
@@ -87,6 +89,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
         /*String ruta = System.getProperty("user.home");
         download("https://firebasestorage.googleapis.com/v0/b/post-proyecto1.appspot.com/o/1.jpg?alt=media&token=cacf003c-1278-4ea0-adef-be5e50379e86", "1.jpg?alt=media&token=cacf003c-1278-4ea0-adef-be5e50379e86", ruta + "/Downloads/");
