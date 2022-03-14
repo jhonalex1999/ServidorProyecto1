@@ -6,7 +6,6 @@ import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import java.io.IOException;
 import java.lang.reflect.Array;

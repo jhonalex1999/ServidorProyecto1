@@ -6,7 +6,6 @@
 package com.proyecto1.ServidorLaboratorio.service;
 
 import com.proyecto1.ServidorLaboratorio.dto.CursoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import java.util.ArrayList;
 import java.util.List;

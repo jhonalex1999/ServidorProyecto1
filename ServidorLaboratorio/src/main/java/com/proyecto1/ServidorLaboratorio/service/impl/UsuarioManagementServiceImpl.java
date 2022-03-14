@@ -13,7 +13,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.proyecto1.ServidorLaboratorio.dto.CursoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.GrupoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
 import com.proyecto1.ServidorLaboratorio.service.UsuarioManagementService;

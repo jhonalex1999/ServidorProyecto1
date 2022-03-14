@@ -5,7 +5,6 @@
  */
 package com.proyecto1.ServidorLaboratorio.controller;
 
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

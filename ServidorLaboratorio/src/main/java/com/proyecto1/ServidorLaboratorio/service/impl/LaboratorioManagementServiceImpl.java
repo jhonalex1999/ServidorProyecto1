@@ -27,7 +27,6 @@ import com.proyecto1.ServidorLaboratorio.dto.MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_LeyHookeDTO;
 import com.proyecto1.ServidorLaboratorio.dto.Variable_MovimientoParabolicoDTO;
 import com.proyecto1.ServidorLaboratorio.dto.ParticipantesDTO;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import com.proyecto1.ServidorLaboratorio.dto.UsuarioDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;

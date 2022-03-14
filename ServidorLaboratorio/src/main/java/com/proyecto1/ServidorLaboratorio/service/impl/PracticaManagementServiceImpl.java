@@ -5,7 +5,6 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.firebase.FirebaseInitializer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +43,25 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     @Override
     public Boolean descargarArchivoProfesor(int codigo_planta) throws MalformedURLException, IOException, Exception {
         try {
-            String ruta = System.getProperty("user.home");
+            String descripcion = "";
+            PracticaDTO practica;
 
+            ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("PRACTICA").whereEqualTo("codigoPlanta", codigo_planta).get();
+
+            try {
+                for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
+                    practica = doc.toObject(PracticaDTO.class);
+                    descripcion = practica.getDescripcion();
+                    if(descripcion.equals("")){
+                        return false;
+                    }
+                }
+            } catch (Exception e) {
+                return null;
+            }
+            String ruta = System.getProperty("user.home");
             // Url con la informacion
-            URL url = new URL(
-                    "https://firebasestorage.googleapis.com/v0/b/post-proyecto1.appspot.com/o/prueba.jpeg?alt=media&token=8d7b3131-6094-4580-8a2b-fd8f4fae5d46");
+            URL url = new URL(descripcion);
 
             // establecemos conexion
             URLConnection urlCon = url.openConnection();
@@ -59,7 +72,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             // Se obtiene el inputStream de la foto web y se abre el fichero
             // local.
             InputStream is = urlCon.getInputStream();
-            FileOutputStream fos = new FileOutputStream(ruta + "/Downloads/1.jpg");
+            FileOutputStream fos = new FileOutputStream(ruta + "/Downloads/Guia-" + codigo_planta + ".pdf");
 
             // Lectura de la foto de la web y escritura en fichero local
             byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -287,13 +300,6 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
 
     private CollectionReference getCollection(String Colecion) {
         return firebase.getFirestore().collection(Colecion);
-    }
-
-    private Map<String, Object> getDocData(PostDTO post) {
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("title", post.getTitle());
-        docData.put("content", post.getContent());
-        return docData;
     }
 
     @Override

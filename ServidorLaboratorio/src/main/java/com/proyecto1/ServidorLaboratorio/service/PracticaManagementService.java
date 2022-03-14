@@ -6,7 +6,6 @@
 package com.proyecto1.ServidorLaboratorio.service;
 
 import com.proyecto1.ServidorLaboratorio.dto.AgendamientoDTO;
-import com.proyecto1.ServidorLaboratorio.dto.PostDTO;
 import com.proyecto1.ServidorLaboratorio.dto.PracticaDTO;
 import java.io.IOException;
 import java.net.MalformedURLException;
