@@ -40,6 +40,7 @@ public class RealTime {
     LeyHookeDTO LeyHooke;
     CaidaLibreDTO CaidaLibre;
     DataSnapshot movParabolico;
+    Boolean bandera2 = false;
 
     @PostConstruct
     private void conectarReal() throws IOException {
@@ -108,8 +109,6 @@ public class RealTime {
     }
 
     public Boolean iniciar(String planta) {
-        Object iniciar;
-        int bandera = 0;
         DatabaseReference hopperRef;
         if (planta.equals("1")) {
             hopperRef = ref1;
@@ -118,7 +117,7 @@ public class RealTime {
         } else {
             hopperRef = ref3;
         }
-        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+        hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
@@ -126,6 +125,7 @@ public class RealTime {
                     Map<String, Object> hopperUpdates = new HashMap<>();
                     hopperUpdates.put("iniciar", true);
                     hopperRef.updateChildrenAsync(hopperUpdates);
+                    prueba(1);
                 }
             }
 
@@ -133,10 +133,13 @@ public class RealTime {
             public void onCancelled(DatabaseError error) {
             }
         });
-        if (bandera == 1) {
-            return true;
+        return bandera2;
+    }
+
+    public void prueba(int num) {
+        if (num == 1) {
+            bandera2 = true;
         }
-        return false;
     }
 
     public void finalizarProceso(String planta) {
