@@ -232,6 +232,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             w.close();
         } catch (IOException e) {
             System.err.println("Problem writing to the file " + e);
+            return false;
         }
         return true;
     }
@@ -403,18 +404,28 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean buscarCompletitudEstudiantes(int codGrupal) {
-        GrupoDTO grupo;
+        UsuarioDTO usuario;
+        ParticipantesDTO participantes;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("codGrupal", codGrupal).get();
 
         int contados = 0;
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                grupo = doc.toObject(GrupoDTO.class
-                );
-                grupo.setId(doc.getId());
-                String id = grupo.getId();
-                if (grupo.getEstado() == 1) {
-                    contados += 1;
+                participantes = doc.toObject(ParticipantesDTO.class);
+                participantes.setId(doc.getId());
+                String id = participantes.getId();
+                String correo = participantes.getCorreo();
+                ApiFuture<QuerySnapshot> querySnapshotApiFutureUsuario = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", correo).get();
+                try {
+                    for (DocumentSnapshot doc2 : querySnapshotApiFutureUsuario.get().getDocuments()) {
+                        usuario = doc2.toObject(UsuarioDTO.class);
+                        usuario.setId(doc2.getId());
+                        if (usuario.getEstado() == 1) {
+                            contados += 1;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
             }
             //AQUI DEBE PONERSE DEPENDIENDO DEL NUMERO POR GRUPOS

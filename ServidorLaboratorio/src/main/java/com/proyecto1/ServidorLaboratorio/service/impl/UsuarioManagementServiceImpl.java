@@ -55,6 +55,7 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
             usuario.setNombreCompleto(nombre);
             usuario.setRol(rol);
             usuario.setCorreo(correo);
+            usuario.setEstado(1);
             Map<String, Object> docData = getDocData(usuario);
             ApiFuture<WriteResult> writeResultApiFuture = getCollection("USUARIO").document().create(docData);
             try {
@@ -158,9 +159,9 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
 
     @Override
     public Boolean cambiarEstadoParticipanteEntrada(String correo) {
-        String Participante = BuscarParticipante(correo);
+        String Usuario = BuscarUsuario(correo);
 
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 1);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("USUARIO").document(Usuario).update("estado", 1);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -173,9 +174,9 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
 
     @Override
     public Boolean cambiarEstadoParticipanteSalida(String correo) {
-        String Participante = BuscarParticipante(correo);
+        String Usuario = BuscarUsuario(correo);
 
-        ApiFuture<WriteResult> writeResultApiFuture = getCollection("PARTICIPANTES").document(Participante).update("estado", 0);
+        ApiFuture<WriteResult> writeResultApiFuture = getCollection("USUARIO").document(Usuario).update("estado", 0);
         try {
             if (null != writeResultApiFuture.get()) {
                 return Boolean.TRUE;
@@ -186,13 +187,13 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
         }
     }
 
-    private String BuscarParticipante(String correo) {
-        String Participante = "vacio";
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("PARTICIPANTES").whereEqualTo("correo", correo).get();
+    private String BuscarUsuario(String correo) {
+        String Usuario = "vacio";
+        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", correo).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                Participante = doc.getId();
-                return Participante;
+                Usuario = doc.getId();
+                return Usuario;
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(LaboratorioManagementServiceImpl.class
@@ -201,7 +202,7 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
             Logger.getLogger(LaboratorioManagementServiceImpl.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-        return Participante;
+        return Usuario;
     }
 
     //Metodo para saber el ID del usuario
@@ -263,6 +264,7 @@ public class UsuarioManagementServiceImpl implements UsuarioManagementService {
         docData.put("correo", usuario.getCorreo());
         docData.put("rol", usuario.getRol());
         docData.put("nombreCompleto", usuario.getNombreCompleto());
+        docData.put("estado", usuario.getEstado());
         return docData;
     }
 

@@ -133,7 +133,6 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
 
                 post.setCodGrupal(codGrupal);
                 post.setCorreo(participantes.get(i));
-                post.setEstado(0);
                 if (i == 0) {
                     post.setRol("Lider");
                 } else {
@@ -212,7 +211,6 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
     private Map<String, Object> getDocDataParticipantes(ParticipantesDTO post) {
         Map<String, Object> docData = new HashMap<>();
         docData.put("codGrupal", post.getCodGrupal());
-        docData.put("estado", post.getEstado());
         docData.put("correo", post.getCorreo());
         docData.put("rol", post.getRol());
         return docData;

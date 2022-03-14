@@ -15,10 +15,12 @@ import lombok.Data;
  */
 @Data
 public class UsuarioDTO {
+
     private String id;
     private int idUsuario;
     private String correo;
     private String rol;
     private String nombreCompleto;
     private ArrayList<String> Cursos;
+    private Integer estado;
 }
