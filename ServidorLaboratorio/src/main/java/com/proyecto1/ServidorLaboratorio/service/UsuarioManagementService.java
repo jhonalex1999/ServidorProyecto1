@@ -18,10 +18,14 @@ import java.util.List;
 public interface UsuarioManagementService {
 
     boolean prueba();
-    
-    public ArrayList<String> buscarCursosMatriculados (String correo);
-    
+
+    public ArrayList<String> buscarCursosMatriculados(String correo);
+
     public Boolean agregarCurso(String correo_institucional, String codigo_curso);
-    
+
     public Boolean ingresarUsuario(String correo_institucional, String nombre);
+
+    Boolean cambiarEstadoParticipanteEntrada(String correo);
+
+    Boolean cambiarEstadoParticipanteSalida(String correo);
 }

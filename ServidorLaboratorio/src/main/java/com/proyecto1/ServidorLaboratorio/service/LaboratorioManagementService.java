@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.proyecto1.ServidorLaboratorio.service;
 
 import com.proyecto1.ServidorLaboratorio.dto.Variable_CaidaLibreDTO;
@@ -25,23 +20,13 @@ import java.util.List;
  */
 public interface LaboratorioManagementService {
     
-    Boolean descargarArchivoProfesor(int codigo_planta) throws MalformedURLException, IOException, Exception;
-    
-    Boolean descargarDatos(int codigo_planta);
-
-    List<AgendamientoDTO> listarAgendamiento(int codigoPlanta);
+    Boolean descargarDatos(int codigo_planta);  
     
     List<Variable_LeyHookeDTO> listarDatosHardwareLeyDeHooke();
     
     List<Variable_MovimientoParabolicoDTO> listarDatosHardwareMovimientoParabolico();
     
     List<Variable_CaidaLibreDTO> listarDatosHardwareCaidaLibre();
-
-    //Boolean crearPdf();
-    
-    Integer agregarParticipantes(ArrayList<String> participantes,int idFranja);
-
-    Boolean buscarHorario(int idAgendamiento, int codGrupal);
 
     Boolean insertarProblema(String idLaboratorio, String problema);
 
@@ -52,10 +37,6 @@ public interface LaboratorioManagementService {
     String buscarQuienEsLider(String correo);
     
     Integer saberCodigoGrupo(String correo);
-
-    Boolean cambiarEstadoParticipanteEntrada(String correo);
-    
-    Boolean cambiarEstadoParticipanteSalida(String correo);
     
     ArrayList<String> listar_Altura_CL(int codigo_planta);
     

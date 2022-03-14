@@ -37,11 +37,6 @@ public class LaboratorioController {
 
     @Autowired
     private LaboratorioManagementService service;
-
-    @GetMapping(value = "/{codigo_planta}/descargarArchivoProfesor")
-    public ResponseEntity descargarArchivoProfesor(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
-        return new ResponseEntity(service.descargarArchivoProfesor(codigo_planta), HttpStatus.OK);
-    }
     
     @GetMapping(value = "/{codigo_planta}/descargarDatos")
     public ResponseEntity descargarDatos(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
@@ -67,21 +62,6 @@ public class LaboratorioController {
         return new ResponseEntity(service.listarDatosHardwareCaidaLibre(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{idFranja}/agregarParticipantes")
-    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String> participantes, @PathVariable(value = "idFranja") Integer idFranja) {
-        return new ResponseEntity(service.agregarParticipantes(participantes, idFranja), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
-    public ResponseEntity listarAgendamiento(@PathVariable(value = "codigoPlanta") int codigoPlanta) {
-        return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
-    public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
-        return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
-    }
-
     @PostMapping(value = "/{idLaboratorio}/{problema}/insertarProblema")
     public ResponseEntity insertarProblema(@PathVariable(value = "idLaboratorio") String idLaboratorio, @PathVariable(value = "problema") String problema) {
         return new ResponseEntity(service.insertarProblema(idLaboratorio, problema), HttpStatus.OK);
@@ -105,16 +85,6 @@ public class LaboratorioController {
     @GetMapping(value = "/{correo}/saberCodigoGrupo")
     public ResponseEntity saberCodigoGrupo(@PathVariable(value = "correo") String correo) {
         return new ResponseEntity(service.saberCodigoGrupo(correo), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteEntrada")
-    public ResponseEntity cambiarEstadoParticipanteEntrada(@PathVariable(value = "correo") String correo) {
-        return new ResponseEntity(service.cambiarEstadoParticipanteEntrada(correo), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteSalida")
-    public ResponseEntity cambiarEstadoParticipanteSalida(@PathVariable(value = "correo") String correo) {
-        return new ResponseEntity(service.cambiarEstadoParticipanteSalida(correo), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigo_planta}/listar_Altura_CL")

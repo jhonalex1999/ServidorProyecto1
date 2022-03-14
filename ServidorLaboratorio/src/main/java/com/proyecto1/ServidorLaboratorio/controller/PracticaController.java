@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto1.ServidorLaboratorio.service.PracticaManagementService;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
@@ -27,6 +28,26 @@ public class PracticaController {
 
     @Autowired
     private PracticaManagementService service;
+
+    @GetMapping(value = "/{codigo_planta}/descargarArchivoProfesor")
+    public ResponseEntity descargarArchivoProfesor(@PathVariable(value = "codigo_planta") int codigo_planta) throws Exception {
+        return new ResponseEntity(service.descargarArchivoProfesor(codigo_planta), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{codigoPlanta}/listarAgendamiento")
+    public ResponseEntity listarAgendamiento(@PathVariable(value = "codigoPlanta") int codigoPlanta) {
+        return new ResponseEntity(service.listarAgendamiento(codigoPlanta), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/{idFranja}/agregarParticipantes")
+    public ResponseEntity agregarParticipantes(@RequestBody ArrayList<String> participantes, @PathVariable(value = "idFranja") Integer idFranja) {
+        return new ResponseEntity(service.agregarParticipantes(participantes, idFranja), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{idAgendamiento}/{codGrupal}/buscarHorario")
+    public ResponseEntity buscarHorario(@PathVariable(value = "idAgendamiento") int idAgendamiento, @PathVariable(value = "codGrupal") int codGrupal) {
+        return new ResponseEntity(service.buscarHorario(idAgendamiento, codGrupal), HttpStatus.OK);
+    }
 
     @GetMapping(value = "/greet/{name}")
     public String greet(@PathVariable(value = "name") String name) {
@@ -41,21 +62,6 @@ public class PracticaController {
     @GetMapping(value = "/{codGrupal}/{codigoPlanta}/verificarAgendamiento")
     public ResponseEntity verificarAgendamiento(@PathVariable(value = "codGrupal") int codGrupal, @PathVariable(value = "codigoPlanta") int codigoPlanta) {
         return new ResponseEntity(service.verificarAgendamiento(codGrupal, codigoPlanta), HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/add")
-    public ResponseEntity add(@RequestBody PostDTO post) {
-        return new ResponseEntity(service.add(post), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/{id}/update")
-    public ResponseEntity edit(@PathVariable(value = "id") String id, @RequestBody PostDTO post) {
-        return new ResponseEntity(service.edit(id, post), HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/{id}/delete")
-    public ResponseEntity delete(@PathVariable(value = "id") String id) {
-        return new ResponseEntity(service.delete(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigo_planta}/descripcionProfesorPractica")

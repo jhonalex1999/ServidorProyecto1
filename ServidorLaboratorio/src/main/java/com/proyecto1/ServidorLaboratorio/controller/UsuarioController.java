@@ -39,7 +39,6 @@ public class UsuarioController {
     public ResponseEntity add(@RequestBody PostDTO post) {
         return new ResponseEntity(service.agregarUsuario(post), HttpStatus.OK);
     }*/
-
     @PostMapping(value = "{correo}/{codigo_curso}/matricularCurso")
     public ResponseEntity matricularCurso(@PathVariable(value = "codigo_curso") String codigo_curso, @PathVariable(value = "correo") String correo_institucional) {
         return new ResponseEntity(service.agregarCurso(correo_institucional, codigo_curso), HttpStatus.OK);
@@ -51,8 +50,18 @@ public class UsuarioController {
     }
 
     @PostMapping(value = "{correo}/{nombreCompleto}/ingresarUsuario")
-    public ResponseEntity ingresarUsuario(@PathVariable(value = "correo") String correo_institucional,@PathVariable(value = "nombreCompleto") String nombre) {
-        return new ResponseEntity(service.ingresarUsuario(correo_institucional,nombre), HttpStatus.OK);
+    public ResponseEntity ingresarUsuario(@PathVariable(value = "correo") String correo_institucional, @PathVariable(value = "nombreCompleto") String nombre) {
+        return new ResponseEntity(service.ingresarUsuario(correo_institucional, nombre), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteEntrada")
+    public ResponseEntity cambiarEstadoParticipanteEntrada(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.cambiarEstadoParticipanteEntrada(correo), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{correo}/cambiarEstadoParticipanteSalida")
+    public ResponseEntity cambiarEstadoParticipanteSalida(@PathVariable(value = "correo") String correo) {
+        return new ResponseEntity(service.cambiarEstadoParticipanteSalida(correo), HttpStatus.OK);
     }
 
 }
