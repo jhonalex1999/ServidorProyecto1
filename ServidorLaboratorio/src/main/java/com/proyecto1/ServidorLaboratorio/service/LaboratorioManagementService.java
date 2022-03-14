@@ -51,12 +51,6 @@ public interface LaboratorioManagementService {
 
     Boolean finalizarProceso(String planta);
 
-    Boolean GuardarCaidaLibre();//2
-
-    Boolean GuardarLeyHooke();//1
-
-    Boolean GuardarMovimientoParabolico();//3
-
     ArrayList<Double> retornarTiempo(int id_planta);
 
     ArrayList<Double> retornarAltura(int codigo_planta);

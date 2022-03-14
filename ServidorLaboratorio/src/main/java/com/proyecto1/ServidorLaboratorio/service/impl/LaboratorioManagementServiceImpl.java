@@ -578,7 +578,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         return bandera;
     }
 
-    @Override
+
     public Boolean GuardarCaidaLibre() {
         CaidaLibreDTO objCaidaLibre = firebase2.getCaidaLibre();
         if (pasarCaidaLibre(objCaidaLibre)) {
@@ -614,7 +614,6 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    @Override
     public Boolean GuardarLeyHooke() {
 
         LeyHookeDTO objHooke = firebase2.getLeyHooke();
@@ -643,7 +642,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
         }
     }
 
-    @Override
+
     public Boolean GuardarMovimientoParabolico() {
         MovimientoParabolicoDTO objMovimientoParabolico = firebase2.getMovimientoParabolico();
         if (pasarDatosMovimientoParabolico(objMovimientoParabolico)) {
@@ -677,6 +676,13 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
 
     @Override
     public Boolean finalizarProceso(String planta) {
+        if (planta.equals("1")) {
+            GuardarLeyHooke();
+        }else if(planta.equals("2")){
+            GuardarCaidaLibre();
+        }else{
+            GuardarMovimientoParabolico();
+        }
         firebase2.finalizarProceso(planta);
         return true;
     }
