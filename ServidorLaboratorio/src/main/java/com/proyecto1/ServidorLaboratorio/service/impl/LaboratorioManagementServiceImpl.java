@@ -98,14 +98,14 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             ArrayList<String> nombres_estudiantes = new ArrayList<>();
             //Array de cada planta
             //Planta 1
-            ArrayList<Integer> valores_elongaciones = new ArrayList<>();
-            ArrayList<Integer> valores_pesos = new ArrayList<>();
+            ArrayList<Double> valores_elongaciones = new ArrayList<>();
+            ArrayList<Double> valores_pesos = new ArrayList<>();
             //Planta 2
-            ArrayList<Integer> valores_errores = new ArrayList<>();
-            ArrayList<Integer> valores_tiempo = new ArrayList<>();
+            ArrayList<Double> valores_errores = new ArrayList<>();
+            ArrayList<Double> valores_tiempo = new ArrayList<>();
             //Planta 3
-            ArrayList<Integer> valores_x = new ArrayList<>();
-            ArrayList<Integer> valores_y = new ArrayList<>();
+            ArrayList<Double> valores_x = new ArrayList<>();
+            ArrayList<Double> valores_y = new ArrayList<>();
             //Carpeta
             String ruta = System.getProperty("user.home");
             String currentPath = Paths.get("").toAbsolutePath().normalize().toString();
@@ -151,22 +151,30 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                     ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_LEY_HOOKE").get();
                     for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
                         labLeyHooke = doc.toObject(LeyHookeDTO.class);
-                        for (int i = 0; i < labLeyHooke.getElongaciones().size(); i++) {
-                            valores_elongaciones.add((int) ((double) labLeyHooke.getElongaciones().get(i)));
+                        Collection<Double> valores = labLeyHooke.getElongaciones().values();
+                        ArrayList<Double> elongaciones = new ArrayList<>(valores);
+                        for (int i = 0; i < elongaciones.size(); i++) {
+                            valores_elongaciones.add(elongaciones.get(i));
                         }
-                        for (int j = 0; j < labLeyHooke.getPesos().size(); j++) {
-                            valores_pesos.add((int) ((double) labLeyHooke.getPesos().get(j)));
+                        Collection<Double> peso = labLeyHooke.getPesos().values();
+                        ArrayList<Double> pesos = new ArrayList<>(peso);
+                        for (int j = 0; j < pesos.size(); j++) {
+                            valores_pesos.add(pesos.get(j));
                         }
                     }
                 } else if (codigo_planta == 2) {
                     ApiFuture<QuerySnapshot> querySnapshotApiFuture2 = firebase.getFirestore().collection("LABORATORIO_CAIDA_LIBRE").get();
                     for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
                         labCaidaLibre = doc.toObject(CaidaLibreDTO.class);
+                        Collection<Double> tiempo = labCaidaLibre.getTiempo().values();
+                        ArrayList<Double> tiempos = new ArrayList<>(tiempo);
                         for (int i = 0; i < labCaidaLibre.getErrores().size(); i++) {
-                            valores_errores.add((int) ((double) labCaidaLibre.getErrores().get(i)));
+                            valores_errores.add(tiempos.get(i));
                         }
+                        Collection<Double> altura = labCaidaLibre.getTiempo().values();
+                        ArrayList<Double> alturas = new ArrayList<>(altura);
                         for (int j = 0; j < labCaidaLibre.getTiempo().size(); j++) {
-                            valores_tiempo.add((int) ((double) labCaidaLibre.getTiempo().get(j)));
+                            valores_tiempo.add(alturas.get(j));
                         }
                     }
                 } else if (codigo_planta == 3) {
@@ -174,10 +182,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                     for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
                         labMovimientoParabolico = doc.toObject(MovimientoParabolicoDTO.class);
                         for (int i = 0; i < labMovimientoParabolico.getDatos_x().size(); i++) {
-                            valores_x.add((int) ((double)labMovimientoParabolico.getDatos_x().get(i)));
+                            valores_x.add(labMovimientoParabolico.getDatos_x().get(i));
                         }
                         for (int j = 0; j < labMovimientoParabolico.getDatos_y().size(); j++) {
-                            valores_y.add((int) ((double)labMovimientoParabolico.getDatos_y().get(j)));
+                            valores_y.add(labMovimientoParabolico.getDatos_y().get(j));
                         }
                     }
                 }
