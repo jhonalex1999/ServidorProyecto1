@@ -47,7 +47,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             PracticaDTO practica;
 
             ApiFuture<QuerySnapshot> querySnapshotApiFuture = getCollection("PRACTICA").whereEqualTo("codigoPlanta", codigo_planta).get();
-            if(querySnapshotApiFuture == null){
+            if(querySnapshotApiFuture.get().isEmpty()){
                 return false;
             }
             try {
@@ -63,8 +63,12 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
             }
             String ruta = System.getProperty("user.home");
             // Url con la informacion
+            
+           
+            
+            
             URL url = new URL(descripcion);
-
+            
             // establecemos conexion
             URLConnection urlCon = url.openConnection();
 
@@ -156,6 +160,7 @@ public class PracticaManagementServiceImpl implements PracticaManagementService 
         boolean bandera = false;
         for (int i = 0; i < participantes.size(); i++) {
             ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("USUARIO").whereEqualTo("correo", participantes.get(i)).get();
+            
             try {
                 if (querySnapshotApiFuture.get().isEmpty()) {
                     bandera = false;
