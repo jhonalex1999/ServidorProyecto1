@@ -120,7 +120,7 @@ public class RealTime {
                     hopperUpdates.put("peso", peso);
                     hopperUpdates.put("iniciar", true);
                     hopperRef.updateChildrenAsync(hopperUpdates);
-                    prueba(1);
+                    bandera2=true;
                 }
             }
 
@@ -130,7 +130,7 @@ public class RealTime {
         });
         return bandera2;
     }
-    public Boolean iniciarCaidaLibre() {
+    public Boolean iniciarCaidaLibre(int peso) {
         DatabaseReference hopperRef;
         hopperRef = ref2;
         hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -139,9 +139,10 @@ public class RealTime {
                 //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
                 if (dataSnapshot.child("iniciar").getValue().toString().equals("false")) {
                     Map<String, Object> hopperUpdates = new HashMap<>();
+                    hopperUpdates.put("peso", peso);
                     hopperUpdates.put("iniciar", true);
                     hopperRef.updateChildrenAsync(hopperUpdates);
-                    prueba(1);
+                    bandera2=true;
                 }
             }
 
@@ -151,7 +152,7 @@ public class RealTime {
         });
         return bandera2;
     }
-    public Boolean iniciarMovimientoParabolico() {
+    public Boolean iniciarMovimientoParabolico(int angulo,int velocidad) {
         DatabaseReference hopperRef;
         hopperRef = ref3;
         hopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -160,9 +161,11 @@ public class RealTime {
                 //System.out.println(dataSnapshot.child("iniciar").getValue().toString());
                 if (dataSnapshot.child("iniciar").getValue().toString().equals("false")) {
                     Map<String, Object> hopperUpdates = new HashMap<>();
+                     hopperUpdates.put("angulo", angulo);
+                      hopperUpdates.put("velocidad", velocidad);
                     hopperUpdates.put("iniciar", true);
                     hopperRef.updateChildrenAsync(hopperUpdates);
-                    prueba(1);
+                    bandera2=true;
                 }
             }
 
@@ -174,12 +177,7 @@ public class RealTime {
     }
     
 
-    public void prueba(int num) {
-        if (num == 1) {
-            bandera2 = true;
-        }
-    }
-
+ 
     public void finalizarProceso(String planta) {
         DatabaseReference hopperRef;
         Map<String, Object> hopperUpdates = new HashMap<>();

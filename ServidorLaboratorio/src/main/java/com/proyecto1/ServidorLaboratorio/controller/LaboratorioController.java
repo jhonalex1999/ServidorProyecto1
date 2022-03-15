@@ -111,17 +111,17 @@ public class LaboratorioController {
         return new ResponseEntity(service.listar_Velocidad_MP(codigo_planta), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{peso}]/iniciarLeyHooke")
+    @GetMapping(value = "/{peso}/iniciarLeyHooke")
     public ResponseEntity iniciarLeyHooke(@PathVariable(value = "peso") int peso) {
         return new ResponseEntity(service.iniciarLeyHooke(peso), HttpStatus.OK);
     }
-     @GetMapping(value = "/iniciarCaidaLibre")
-    public ResponseEntity iniciarCaidaLibre() {
-        return new ResponseEntity(service.iniciarCaidaLibre(), HttpStatus.OK);
+     @GetMapping(value = "/{peso}/iniciarCaidaLibre")
+    public ResponseEntity iniciarCaidaLibre(@PathVariable(value = "peso") int peso) {
+        return new ResponseEntity(service.iniciarCaidaLibre(peso), HttpStatus.OK);
     }
-     @GetMapping(value = "/iniciarMovimientoParabolico")
-    public ResponseEntity iniciarMovimientoParabolico() {
-        return new ResponseEntity(service.iniciarMovimientoParabolico(), HttpStatus.OK);
+     @GetMapping(value = "/{angulo}/{velocidad}/iniciarMovimientoParabolico")
+    public ResponseEntity iniciarMovimientoParabolico(@PathVariable(value = "angulo") int angulo,@PathVariable(value = "velocidad") int velocidad) {
+        return new ResponseEntity(service.iniciarMovimientoParabolico(angulo,velocidad), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{planta}/finalizarProceso")

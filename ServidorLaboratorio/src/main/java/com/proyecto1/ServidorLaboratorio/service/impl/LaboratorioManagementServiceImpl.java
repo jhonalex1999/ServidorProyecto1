@@ -815,14 +815,52 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public Boolean iniciarCaidaLibre() {
-        Boolean bandera = firebase2.iniciarCaidaLibre();
+    public Boolean iniciarCaidaLibre(int peso) {
+         int pesobd=0;
+        if(peso==50){
+             pesobd=1;
+        }else if(peso==100){
+             pesobd=2;
+        }else if(peso==150){
+             pesobd=3;
+        }else if(peso==200){
+             pesobd=4;
+        }else if(peso==250){
+             pesobd=5;
+        }
+        
+        Boolean bandera = firebase2.iniciarCaidaLibre(pesobd);
         return bandera; 
     }
 
     @Override
-    public Boolean iniciarMovimientoParabolico() {
-        Boolean bandera = firebase2.iniciarMovimientoParabolico();
+    public Boolean iniciarMovimientoParabolico(int angulo, int velocidad) {
+          int angulobd=0;
+          int velocidadbd=0;
+        if(angulo==50){
+             angulobd=1;
+        }else if(angulo==100){
+              angulobd=2;
+        }else if(angulo==150){
+              angulobd=3;
+        }else if(angulo==200){
+              angulobd=4;
+        }else if(angulo==250){
+              angulobd=5;
+        }
+          
+        if(velocidad==50){
+            velocidadbd=1;
+        }else if(velocidad==100){
+             velocidadbd=2;
+        }else if(velocidad==150){
+             velocidadbd=3;
+        }else if(velocidad==200){
+             velocidadbd=4;
+        }else if(velocidad==250){
+             velocidadbd=5;
+        }
+        Boolean bandera = firebase2.iniciarMovimientoParabolico(angulobd, velocidadbd);
         return bandera; 
     }
 }
