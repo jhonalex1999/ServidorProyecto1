@@ -37,13 +37,13 @@ public interface LaboratorioManagementService {
 
     Integer saberCodigoGrupo(String correo);
 
-    ArrayList<String> listar_Altura_CL(int codigo_planta);
+    ArrayList<Integer> listar_Altura_CL(int codigo_planta);
 
-    ArrayList<String> listar_Pesos_LH(int codigo_planta);
+    ArrayList<Integer> listar_Pesos_LH(int codigo_planta);
 
-    ArrayList<String> listar_Angulo_MP(int codigo_planta);
+    ArrayList<Integer> listar_Angulo_MP(int codigo_planta);
 
-    ArrayList<String> listar_Velocidad_MP(int codigo_planta);
+    ArrayList<Integer> listar_Velocidad_MP(int codigo_planta);
 
     Boolean iniciarLeyHooke(int peso);
     Boolean iniciarCaidaLibre(int peso);

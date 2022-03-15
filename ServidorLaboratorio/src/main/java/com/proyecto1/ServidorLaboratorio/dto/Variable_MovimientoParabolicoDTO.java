@@ -18,6 +18,6 @@ public class Variable_MovimientoParabolicoDTO {
 
     private String id;
     private Integer codigo_planta;
-    private ArrayList<String> rango_angulo;
-    private ArrayList<String> rango_velocidad;
+    private ArrayList<Integer> rango_angulo;
+    private ArrayList<Integer> rango_velocidad;
 }

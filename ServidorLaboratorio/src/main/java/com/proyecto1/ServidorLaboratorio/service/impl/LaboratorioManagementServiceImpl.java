@@ -478,8 +478,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<String> listar_Altura_CL(int codigo_planta) {
-        ArrayList<String> rangos_altura;
+    public ArrayList<Integer> listar_Altura_CL(int codigo_planta) {
+        ArrayList<Integer> rangos_altura;
         Variable_CaidaLibreDTO laboratorio_caida_libre;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_CAIDA_LIBRE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
@@ -497,8 +497,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<String> listar_Pesos_LH(int codigo_planta) {
-        ArrayList<String> rangos_pesos;
+    public ArrayList<Integer> listar_Pesos_LH(int codigo_planta) {
+            ArrayList<Integer> rangos_pesos;
         Variable_LeyHookeDTO laboratorio_ley_hooke;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
@@ -516,8 +516,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<String> listar_Angulo_MP(int codigo_planta) {
-        ArrayList<String> rangos_angulo;
+    public ArrayList<Integer> listar_Angulo_MP(int codigo_planta) {
+        ArrayList<Integer> rangos_angulo;
         Variable_MovimientoParabolicoDTO laboratorio_movimiento_parabolico;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
@@ -535,8 +535,8 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<String> listar_Velocidad_MP(int codigo_planta) {
-        ArrayList<String> rangos_velocidad;
+    public ArrayList<Integer> listar_Velocidad_MP(int codigo_planta) {
+        ArrayList<Integer> rangos_velocidad;
         Variable_MovimientoParabolicoDTO laboratorio_movimiento_parabolico;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {

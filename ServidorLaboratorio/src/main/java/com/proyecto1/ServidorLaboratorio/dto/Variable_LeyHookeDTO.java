@@ -17,5 +17,5 @@ public class Variable_LeyHookeDTO {
 
     private String id;
     private Integer codigo_planta;
-    private ArrayList<String> rango_pesos;
+    private ArrayList<Integer> rango_pesos;
 }

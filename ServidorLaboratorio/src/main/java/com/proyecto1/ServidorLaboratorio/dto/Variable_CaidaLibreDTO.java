@@ -18,6 +18,6 @@ public class Variable_CaidaLibreDTO {
     private String id;
     private Integer codigo_planta;
     private Integer numLanzamientos;
-    private ArrayList<String> rangos_altura;
+    private ArrayList<Integer> rangos_altura;
     private Integer peso;
 }
