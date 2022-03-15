@@ -14,10 +14,10 @@ public class MovimientoParabolicoDTO {
 
     private String id;
     private Integer codigo_planta;
-    private ArrayList<Double> datos_x;
-    private ArrayList<Double> datos_y;
+    private ArrayList<String> datos_x;
+    private ArrayList<String> datos_y;
     private int nRep;
-    private String tiempo;
+    private ArrayList<String> tiempo;
     private String url_imagen;
     private int velocidad;
 }

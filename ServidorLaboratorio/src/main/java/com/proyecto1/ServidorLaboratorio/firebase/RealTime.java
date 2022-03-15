@@ -104,7 +104,7 @@ public class RealTime {
     }
 
     public MovimientoParabolicoDTO getMovimientoParabolico() {
-
+        MovimientoParabolico=movParabolico.getValue(MovimientoParabolicoDTO.class);
         return MovimientoParabolico;
     }
 

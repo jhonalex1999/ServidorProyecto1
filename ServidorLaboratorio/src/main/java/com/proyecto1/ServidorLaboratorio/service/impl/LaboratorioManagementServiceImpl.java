@@ -182,10 +182,10 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
                     for (DocumentSnapshot doc : querySnapshotApiFuture2.get().getDocuments()) {
                         labMovimientoParabolico = doc.toObject(MovimientoParabolicoDTO.class);
                         for (int i = 0; i < labMovimientoParabolico.getDatos_x().size(); i++) {
-                            valores_x.add(labMovimientoParabolico.getDatos_x().get(i));
+                            valores_x.add(Double.parseDouble(labMovimientoParabolico.getDatos_x().get(i)));
                         }
                         for (int j = 0; j < labMovimientoParabolico.getDatos_y().size(); j++) {
-                            valores_y.add(labMovimientoParabolico.getDatos_y().get(j));
+                            valores_y.add(Double.parseDouble( labMovimientoParabolico.getDatos_y().get(j)));
                         }
                     }
                 }
@@ -743,12 +743,17 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public ArrayList<Double> retornarX(int codigo_planta) {
         MovimientoParabolicoDTO movimiento_parabolico;
+        ArrayList<Double> x = null;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
                 movimiento_parabolico.setId(doc.getId());
-                ArrayList<Double> x = movimiento_parabolico.getDatos_x();
+                for (int i = 0; i < movimiento_parabolico.getDatos_x().size(); i++) {
+                    x.add( Double.parseDouble( movimiento_parabolico.getDatos_x().get(i)));
+                }
+              
+                
                 return x;
             }
             //return cursos;
@@ -761,12 +766,16 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public ArrayList<Double> retornarY(int codigo_planta) {
         MovimientoParabolicoDTO movimiento_parabolico;
+         ArrayList<Double> y=null;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 movimiento_parabolico = doc.toObject(MovimientoParabolicoDTO.class);
                 movimiento_parabolico.setId(doc.getId());
-                ArrayList<Double> y = movimiento_parabolico.getDatos_y();
+                for (int i = 0; i < movimiento_parabolico.getDatos_y().size(); i++) {
+                     y.add(Double.parseDouble(movimiento_parabolico.getDatos_y().get(i)));
+                }
+                
                 return y;
             }
             //return cursos;
