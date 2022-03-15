@@ -17,6 +17,5 @@ import lombok.Data;
 public class Variable_LeyHookeDTO {
     private String id;
     private Integer codigo_planta;
-    private ArrayList<String> rangos_elongacion;
-    private ArrayList<String> rangos_fuerza;
+    private ArrayList<String> rangos_pesos;
 }

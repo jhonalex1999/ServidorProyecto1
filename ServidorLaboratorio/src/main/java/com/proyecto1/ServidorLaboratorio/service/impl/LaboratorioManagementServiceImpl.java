@@ -497,35 +497,16 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     }
 
     @Override
-    public ArrayList<String> listar_Elongacion_LH(int codigo_planta) {
-        ArrayList<String> rangos_elongacion;
+    public ArrayList<String> listar_Pesos_LH(int codigo_planta) {
+        ArrayList<String> rangos_pesos;
         Variable_LeyHookeDTO laboratorio_ley_hooke;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 laboratorio_ley_hooke = doc.toObject(Variable_LeyHookeDTO.class);
                 laboratorio_ley_hooke.setId(doc.getId());
-                rangos_elongacion = laboratorio_ley_hooke.getRangos_elongacion();
-                return rangos_elongacion;
-            }
-            //return cursos;
-        } catch (Exception e) {
-            return null;
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<String> listar_Fuerza_LH(int codigo_planta) {
-        ArrayList<String> rangos_fuerza;
-        Variable_LeyHookeDTO laboratorio_ley_hooke;
-        ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("VARIABLE_LEY_HOOKE").whereEqualTo("codigo_planta", codigo_planta).get();
-        try {
-            for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
-                laboratorio_ley_hooke = doc.toObject(Variable_LeyHookeDTO.class);
-                laboratorio_ley_hooke.setId(doc.getId());
-                rangos_fuerza = laboratorio_ley_hooke.getRangos_fuerza();
-                return rangos_fuerza;
+                rangos_pesos = laboratorio_ley_hooke.getRangos_pesos();
+                return rangos_pesos;
             }
             //return cursos;
         } catch (Exception e) {

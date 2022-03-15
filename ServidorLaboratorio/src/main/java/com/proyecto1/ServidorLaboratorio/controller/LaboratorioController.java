@@ -91,14 +91,9 @@ public class LaboratorioController {
         return new ResponseEntity(service.listar_Altura_CL(codigo_planta), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{codigo_planta}/listar_Elongacion_LH")
-    public ResponseEntity listar_Elongacion_LH(@PathVariable(value = "codigo_planta") int codigo_planta) {
-        return new ResponseEntity(service.listar_Elongacion_LH(codigo_planta), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{codigo_planta}/listar_Fuerza_LH")
-    public ResponseEntity listar_Fuerza_LH(@PathVariable(value = "codigo_planta") int codigo_planta) {
-        return new ResponseEntity(service.listar_Fuerza_LH(codigo_planta), HttpStatus.OK);
+    @GetMapping(value = "/{codigo_planta}/listar_Pesos_LH")
+    public ResponseEntity listar_Pesos_LH(@PathVariable(value = "codigo_planta") int codigo_planta) {
+        return new ResponseEntity(service.listar_Pesos_LH(codigo_planta), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{codigo_planta}/listar_Angulo_MP")

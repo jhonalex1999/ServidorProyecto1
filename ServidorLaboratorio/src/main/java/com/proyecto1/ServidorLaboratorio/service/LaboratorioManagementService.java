@@ -39,9 +39,7 @@ public interface LaboratorioManagementService {
 
     ArrayList<String> listar_Altura_CL(int codigo_planta);
 
-    ArrayList<String> listar_Elongacion_LH(int codigo_planta);
-
-    ArrayList<String> listar_Fuerza_LH(int codigo_planta);
+    ArrayList<String> listar_Pesos_LH(int codigo_planta);
 
     ArrayList<String> listar_Angulo_MP(int codigo_planta);
 
