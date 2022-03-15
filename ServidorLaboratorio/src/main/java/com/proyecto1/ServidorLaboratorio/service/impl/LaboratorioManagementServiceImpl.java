@@ -505,7 +505,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
                 laboratorio_ley_hooke = doc.toObject(Variable_LeyHookeDTO.class);
                 laboratorio_ley_hooke.setId(doc.getId());
-                rangos_pesos = laboratorio_ley_hooke.getRangos_pesos();
+                rangos_pesos = laboratorio_ley_hooke.getRango_pesos();
                 return rangos_pesos;
             }
             //return cursos;
