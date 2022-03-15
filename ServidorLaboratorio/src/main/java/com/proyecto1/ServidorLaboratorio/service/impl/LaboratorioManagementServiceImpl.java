@@ -743,7 +743,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public ArrayList<Double> retornarX(int codigo_planta) {
         MovimientoParabolicoDTO movimiento_parabolico;
-        ArrayList<Double> x = null;
+        ArrayList<Double> x = new ArrayList<>();;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
@@ -766,7 +766,7 @@ public class LaboratorioManagementServiceImpl implements LaboratorioManagementSe
     @Override
     public ArrayList<Double> retornarY(int codigo_planta) {
         MovimientoParabolicoDTO movimiento_parabolico;
-         ArrayList<Double> y=null;
+         ArrayList<Double> y=new ArrayList<>();;
         ApiFuture<QuerySnapshot> querySnapshotApiFuture = firebase.getFirestore().collection("LABORATORIO_MOVIMIENTO_PARABOLICO").whereEqualTo("codigo_planta", codigo_planta).get();
         try {
             for (DocumentSnapshot doc : querySnapshotApiFuture.get().getDocuments()) {
